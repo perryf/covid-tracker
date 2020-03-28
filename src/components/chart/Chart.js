@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { useTheme } from '@material-ui/core/styles'
 import {
 	LineChart,
@@ -15,32 +16,31 @@ const createData = (time, amount) => {
 	return { time, amount }
 }
 
-const data = [
-	createData('00:00', 0),
-	createData('03:00', 300),
-	createData('06:00', 600),
-	createData('09:00', 800),
-	createData('12:00', 1500),
-	createData('15:00', 2000),
-	createData('18:00', 2400),
-	createData('21:00', 2400),
-	createData('24:00', undefined)
-]
-
-const Chart = () => {
+const Chart = props => {
+	const { selectedStateInfo = {}, selectedStateHistory = [] } = props
 	const theme = useTheme()
+
+	const data = selectedStateHistory
+		.slice()
+		.reverse()
+		.map(day => {
+			return createData(
+				day.dateChecked ? moment(day.dateChecked).format('MM/DD/YYYY') : '',
+				day.positive
+			)
+		})
 
 	return (
 		<React.Fragment>
-			<Title>Today</Title>
+			<Title>{selectedStateInfo.state}</Title>
 			<ResponsiveContainer>
 				<LineChart
 					data={data}
 					margin={{
-						top: 16,
-						right: 16,
+						top: 8,
+						right: 8,
 						bottom: 0,
-						left: 24
+						left: 12
 					}}
 				>
 					<XAxis dataKey="time" stroke={theme.palette.text.secondary} />
@@ -48,9 +48,12 @@ const Chart = () => {
 						<Label
 							angle={270}
 							position="left"
-							style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
+							style={{
+								textAnchor: 'middle',
+								fill: theme.palette.text.primary
+							}}
 						>
-							Sales ($)
+							# Tested positive
 						</Label>
 					</YAxis>
 					<Line
