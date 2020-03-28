@@ -24,14 +24,24 @@ const useStyles = makeStyles({
 })
 
 const SideDrawer = props => {
-	const { statesInfo, selectState } = props
+	const { statesInfo, selectState, changeState } = props
 	const classes = useStyles()
 
 	return (
 		<Drawer variant="permanent" className={classes.drawerPaper}>
 			<List>
+				<ListItem
+					className={clsx(
+						classes.listItem,
+						selectState === 'us' && classes.listItemSelected
+					)}
+					onClick={() => changeState('us')}
+				>
+					USA
+				</ListItem>
 				{statesInfo.map(info => {
 					const selected = info.state === selectState
+
 					return (
 						<ListItem
 							key={info.state}
@@ -39,7 +49,7 @@ const SideDrawer = props => {
 								classes.listItem,
 								selected && classes.listItemSelected
 							)}
-							onClick={() => props.changeState(info.state)}
+							onClick={() => changeState(info.state)}
 						>
 							{info.name} ({info.state})
 						</ListItem>
@@ -52,11 +62,13 @@ const SideDrawer = props => {
 
 SideDrawer.propTypes = {
 	selectState: PropTypes.string,
-	statesInfo: PropTypes.array.isRequired
+	statesInfo: PropTypes.array,
+	changeState: PropTypes.func.isRequired
 }
 
 SideDrawer.defaultProps = {
-	selectState: ''
+	selectState: '',
+	statesInfo: []
 }
 
 export default SideDrawer

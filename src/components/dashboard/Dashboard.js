@@ -6,34 +6,15 @@ import Box from '@material-ui/core/Box'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
-import Badge from '@material-ui/core/Badge'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
-import Link from '@material-ui/core/Link'
-import NotificationsIcon from '@material-ui/icons/Notifications'
+import { urlStates, urlDaily, urlInfo, urlUSCurrent, urlUSHistoric } from 'data'
 import Chart from '../chart/Chart'
-import Deposits from '../deposits/Deposits'
 import SideDrawer from '../sideDrawer/SideDrawer'
-import Orders from '../orders/Orders'
-
-const urlStates = 'https://covidtracking.com/api/states'
-const urlDaily = 'https://covidtracking.com/api/states/daily'
-const urlInfo = 'https://covidtracking.com/api/states/info'
-
-const Copyright = () => {
-	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{'Copyright © '}
-			<Link color="inherit" href="#">
-				Your Website
-			</Link>{' '}
-			{new Date().getFullYear()}
-			{'.'}
-		</Typography>
-	)
-}
+import TableDisplay from '../tableDisplay/TableDisplay'
+import Footer from '../footer/Footer'
+import Title from '../title/Title'
 
 const drawerWidth = 240
 
@@ -76,7 +57,10 @@ const Dashboard = () => {
 	const [statesCurrent, setCurrentStates] = useState([])
 	const [statesHistoric, setHistoricStates] = useState([])
 	const [statesInfo, setInfoStates] = useState([])
-	const [selectState, setSelectedState] = useState('')
+	const [usCurrent, setUSCurrent] = useState([])
+	const [usHistoric, setUSHistoric] = useState([])
+	const [chartDisplay, setChartDisplay] = useState('')
+	const [selectState, setSelectedState] = useState('us')
 
 	// * Effect
 	useEffect(() => {
@@ -92,7 +76,25 @@ const Dashboard = () => {
 
 		fetch(urlInfo)
 			.then(res => res.json())
-			.then(json => setInfoStates(json))
+			.then(json =>
+				setInfoStates(
+					json.sort((a, b) => {
+						if (a.name < b.name) return -1
+						if (b.name < a.name) return 1
+						return 0
+					})
+				)
+			)
+			.catch(err => console.info(err))
+
+		fetch(urlUSCurrent)
+			.then(res => res.json())
+			.then(json => setUSCurrent(json))
+			.catch(err => console.info(err))
+
+		fetch(urlUSHistoric)
+			.then(res => res.json())
+			.then(json => setUSHistoric(json))
 			.catch(err => console.info(err))
 	}, [])
 
@@ -100,11 +102,21 @@ const Dashboard = () => {
 		setSelectedState(stateAbr)
 	}
 
+	const changeChartDisplay = ({ target: { value } }) => {
+		setChartDisplay(value)
+	}
+
 	const classes = useStyles()
 	const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
-	const selectStateCurrent = statesCurrent.find(s => s.state === selectState)
-	const selectStateHistory = statesHistoric.filter(s => s.state === selectState)
+	const selectStateCurrent =
+		selectState === 'us'
+			? usCurrent[0]
+			: statesCurrent.find(s => s.state === selectState)
+	const selectStateHistory =
+		selectState === 'us'
+			? usHistoric
+			: statesHistoric.filter(s => s.state === selectState)
 	const selectStateInfo = statesInfo.find(s => s.state === selectState)
 
 	return (
@@ -122,13 +134,8 @@ const Dashboard = () => {
 						noWrap
 						className={classes.title}
 					>
-						COVID
+						COVID Tracker
 					</Typography>
-					<IconButton color="inherit">
-						<Badge badgeContent={4} color="secondary">
-							<NotificationsIcon />
-						</Badge>
-					</IconButton>
 				</Toolbar>
 			</AppBar>
 
@@ -143,6 +150,15 @@ const Dashboard = () => {
 				<div className={classes.appBarSpacer} />
 				<Container maxWidth="lg" className={classes.container}>
 					<Grid container spacing={2}>
+						{/* Title */}
+						<Grid item xs={12} md={12} lg={12}>
+							<Title
+								selectState={selectState}
+								selectStateInfo={selectStateInfo}
+								selectStateCurrent={selectStateCurrent}
+							/>
+						</Grid>
+
 						{/* Chart */}
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={fixedHeightPaper}>
@@ -150,29 +166,28 @@ const Dashboard = () => {
 									selectStateCurrent={selectStateCurrent}
 									selectStateHistory={selectStateHistory}
 									selectStateInfo={selectStateInfo}
+									selectState={selectState}
+									chartDisplay={chartDisplay}
+									changeChartDisplay={changeChartDisplay}
 								/>
 							</Paper>
 						</Grid>
 
-						{/* Recent Deposits */}
-						{false && (
-							<Grid item xs={12} md={4} lg={3}>
-								<Paper className={fixedHeightPaper}>
-									<Deposits />
-								</Paper>
-							</Grid>
-						)}
-
-						{/* Recent Orders */}
+						{/* Recent Table */}
 						<Grid item xs={12}>
 							<Paper className={classes.paper}>
-								<Orders />
+								<TableDisplay
+									selectStateCurrent={selectStateCurrent}
+									selectStateHistory={selectStateHistory}
+									selectStateInfo={selectStateInfo}
+									selectState={selectState}
+								/>
 							</Paper>
 						</Grid>
 					</Grid>
 
 					<Box pt={4}>
-						<Copyright />
+						<Footer />
 					</Box>
 				</Container>
 			</main>

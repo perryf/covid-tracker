@@ -1,7 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { makeStyles } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/core/styles'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import Radio from '@material-ui/core/Radio'
+import FormControl from '@material-ui/core/FormControl'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormLabel from '@material-ui/core/FormLabel'
 import {
 	LineChart,
 	Line,
@@ -10,21 +16,51 @@ import {
 	Label,
 	ResponsiveContainer
 } from 'recharts'
-import Title from '../title/Title'
-import Typography from '@material-ui/core/Typography'
 
-// Generate Sales Data
+const getYLabel = type => {
+	switch (type) {
+		case 'positive':
+			return 'Total Positive'
+
+		case 'death':
+			return 'Total Deaths'
+
+		case 'totalTestResults':
+			return 'Total Tested'
+
+		case 'hospitalized':
+			return 'Total Hospitalized'
+		default:
+			return ''
+	}
+}
+
+const useStyles = makeStyles({
+	chartOptions: {
+		display: 'flex',
+		flexDirection: 'row'
+	}
+})
+
 const createData = (time, amount) => {
 	return { time, amount }
 }
 
 const Chart = props => {
 	const {
-		selectStateInfo = {},
-		selectStateCurrent = {},
-		selectStateHistory = []
+		selectStateInfo,
+		selectStateCurrent,
+		selectStateHistory,
+		selectState,
+		chartDisplay,
+		changeChartDisplay
 	} = props
+
 	const theme = useTheme()
+	const classes = useStyles()
+
+	const displayType = chartDisplay || 'positive'
+	const yLabel = getYLabel(displayType)
 
 	const data = selectStateHistory
 		.slice()
@@ -32,13 +68,41 @@ const Chart = props => {
 		.map(day => {
 			return createData(
 				day.dateChecked ? moment(day.dateChecked).format('MM/DD/YYYY') : '',
-				day.positive
+				day[displayType] || 0
 			)
 		})
 
 	return (
 		<React.Fragment>
-			<Title>{selectStateInfo.name || 'Select a State'}</Title>
+			<FormControl>
+				{false && <FormLabel component="legend">Display</FormLabel>}
+				<RadioGroup
+					aria-label="displayOptions"
+					name="displayOptions"
+					className={classes.chartOptions}
+					value={chartDisplay}
+					onChange={changeChartDisplay}
+				>
+					<FormControlLabel
+						value="positive"
+						control={<Radio />}
+						label="Positives"
+					/>
+					<FormControlLabel value="death" control={<Radio />} label="Deaths" />
+					<FormControlLabel
+						value="totalTestResults"
+						control={<Radio />}
+						label="Total Tested"
+					/>
+
+					<FormControlLabel
+						value="hospitalized"
+						control={<Radio />}
+						label="Total Hospitalized"
+					/>
+				</RadioGroup>
+			</FormControl>
+
 			<ResponsiveContainer>
 				<LineChart
 					data={data}
@@ -59,7 +123,7 @@ const Chart = props => {
 								fill: theme.palette.text.primary
 							}}
 						>
-							# Tested positive
+							{yLabel}
 						</Label>
 					</YAxis>
 					<Line
@@ -75,15 +139,19 @@ const Chart = props => {
 }
 
 Chart.propTypes = {
+	selectState: PropTypes.string,
+	chartDisplay: PropTypes.string,
 	selectStateInfo: PropTypes.object,
 	selectStateCurrent: PropTypes.object,
-	selectStateHistory: PropTypes.array
+	selectStateHistory: PropTypes.array,
+	changeChartDisplay: PropTypes.func.isRequired
 }
 
 Chart.defaultProps = {
+	selectState: '',
 	selectStateInfo: {},
 	selectStateCurrent: {},
-	selectStateHistory: {}
+	selectStateHistory: []
 }
 
 export default Chart
