@@ -59,7 +59,7 @@ const Dashboard = () => {
 	const [statesInfo, setInfoStates] = useState([])
 	const [usCurrent, setUSCurrent] = useState([])
 	const [usHistoric, setUSHistoric] = useState([])
-	const [chartDisplay, setChartDisplay] = useState('')
+	const [chartDisplay, setChartDisplay] = useState('positive')
 	const [selectState, setSelectedState] = useState('us')
 
 	// * Effect
