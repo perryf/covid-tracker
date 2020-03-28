@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
@@ -16,33 +17,28 @@ const useStyles = makeStyles({
 		'&:hover': {
 			background: '#ddd'
 		}
+	},
+	listItemSelected: {
+		background: '#dde'
 	}
 })
 
 const SideDrawer = props => {
-	// * State
-	const [statesInfo, setStatesData] = useState([])
-
-	// * Effect
-	useEffect(() => {
-		const url = 'https://covidtracking.com/api/states/info'
-
-		fetch(url)
-			.then(res => res.json())
-			.then(json => setStatesData(json))
-			.catch(err => console.info(err))
-	}, [])
-
+	const { statesInfo, selectState } = props
 	const classes = useStyles()
 
 	return (
 		<Drawer variant="permanent" className={classes.drawerPaper}>
 			<List>
 				{statesInfo.map(info => {
+					const selected = info.state === selectState
 					return (
 						<ListItem
 							key={info.state}
-							className={classes.listItem}
+							className={clsx(
+								classes.listItem,
+								selected && classes.listItemSelected
+							)}
 							onClick={() => props.changeState(info.state)}
 						>
 							{info.name} ({info.state})
@@ -52,6 +48,15 @@ const SideDrawer = props => {
 			</List>
 		</Drawer>
 	)
+}
+
+SideDrawer.propTypes = {
+	selectState: PropTypes.string,
+	statesInfo: PropTypes.array.isRequired
+}
+
+SideDrawer.defaultProps = {
+	selectState: ''
 }
 
 export default SideDrawer

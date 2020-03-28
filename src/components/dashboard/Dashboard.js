@@ -18,6 +18,10 @@ import Deposits from '../deposits/Deposits'
 import SideDrawer from '../sideDrawer/SideDrawer'
 import Orders from '../orders/Orders'
 
+const urlStates = 'https://covidtracking.com/api/states'
+const urlDaily = 'https://covidtracking.com/api/states/daily'
+const urlInfo = 'https://covidtracking.com/api/states/info'
+
 const Copyright = () => {
 	return (
 		<Typography variant="body2" color="textSecondary" align="center">
@@ -64,35 +68,31 @@ const useStyles = makeStyles(theme => ({
 		flexDirection: 'column'
 	},
 	fixedHeight: {
-		height: 240
+		height: 320
 	}
 }))
 
 const Dashboard = () => {
 	const [statesCurrent, setCurrentStates] = useState([])
 	const [statesHistoric, setHistoricStates] = useState([])
-	const [selectedState, setSelectedState] = useState('')
+	const [statesInfo, setInfoStates] = useState([])
+	const [selectState, setSelectedState] = useState('')
 
 	// * Effect
 	useEffect(() => {
-		const url = 'https://covidtracking.com/api/states'
-
-		fetch(url)
+		fetch(urlStates)
 			.then(res => res.json())
-			.then(json => {
-				console.log(json)
-				setCurrentStates(json)
-			})
+			.then(json => setCurrentStates(json))
 			.catch(err => console.info(err))
-
-		const urlDaily = 'https://covidtracking.com/api/states/daily'
 
 		fetch(urlDaily)
 			.then(res => res.json())
-			.then(json => {
-				console.log(json)
-				setHistoricStates(json)
-			})
+			.then(json => setHistoricStates(json))
+			.catch(err => console.info(err))
+
+		fetch(urlInfo)
+			.then(res => res.json())
+			.then(json => setInfoStates(json))
 			.catch(err => console.info(err))
 	}, [])
 
@@ -103,14 +103,9 @@ const Dashboard = () => {
 	const classes = useStyles()
 	const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
-	const selectedStateInfo = statesCurrent.find(s => s.state === selectedState)
-	const selectedStateHistory = statesHistoric.filter(
-		s => s.state === selectedState
-	)
-
-	console.log(selectedState)
-	console.log(selectedStateInfo)
-	console.log(selectedStateHistory)
+	const selectStateCurrent = statesCurrent.find(s => s.state === selectState)
+	const selectStateHistory = statesHistoric.filter(s => s.state === selectState)
+	const selectStateInfo = statesInfo.find(s => s.state === selectState)
 
 	return (
 		<div className={classes.root}>
@@ -138,7 +133,11 @@ const Dashboard = () => {
 			</AppBar>
 
 			{/* Sidebar */}
-			<SideDrawer changeState={changeState} />
+			<SideDrawer
+				changeState={changeState}
+				statesInfo={statesInfo}
+				selectState={selectState}
+			/>
 
 			<main className={classes.content}>
 				<div className={classes.appBarSpacer} />
@@ -148,8 +147,9 @@ const Dashboard = () => {
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={fixedHeightPaper}>
 								<Chart
-									selectedStateInfo={selectedStateInfo}
-									selectedStateHistory={selectedStateHistory}
+									selectStateCurrent={selectStateCurrent}
+									selectStateHistory={selectStateHistory}
+									selectStateInfo={selectStateInfo}
 								/>
 							</Paper>
 						</Grid>

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import { useTheme } from '@material-ui/core/styles'
 import {
@@ -10,6 +11,7 @@ import {
 	ResponsiveContainer
 } from 'recharts'
 import Title from '../title/Title'
+import Typography from '@material-ui/core/Typography'
 
 // Generate Sales Data
 const createData = (time, amount) => {
@@ -17,10 +19,14 @@ const createData = (time, amount) => {
 }
 
 const Chart = props => {
-	const { selectedStateInfo = {}, selectedStateHistory = [] } = props
+	const {
+		selectStateInfo = {},
+		selectStateCurrent = {},
+		selectStateHistory = []
+	} = props
 	const theme = useTheme()
 
-	const data = selectedStateHistory
+	const data = selectStateHistory
 		.slice()
 		.reverse()
 		.map(day => {
@@ -32,7 +38,7 @@ const Chart = props => {
 
 	return (
 		<React.Fragment>
-			<Title>{selectedStateInfo.state}</Title>
+			<Title>{selectStateInfo.name || 'Select a State'}</Title>
 			<ResponsiveContainer>
 				<LineChart
 					data={data}
@@ -66,6 +72,18 @@ const Chart = props => {
 			</ResponsiveContainer>
 		</React.Fragment>
 	)
+}
+
+Chart.propTypes = {
+	selectStateInfo: PropTypes.object,
+	selectStateCurrent: PropTypes.object,
+	selectStateHistory: PropTypes.array
+}
+
+Chart.defaultProps = {
+	selectStateInfo: {},
+	selectStateCurrent: {},
+	selectStateHistory: {}
 }
 
 export default Chart
