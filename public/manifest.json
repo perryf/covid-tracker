@@ -1,6 +1,6 @@
 {
-	"short_name": "Covid 19 USA tracker",
-	"name": "Covid 19 USA tracker",
+	"short_name": "US Covid 19 tracker",
+	"name": "US Covid 19 tracker",
 	"icons": [],
 	"start_url": ".",
 	"display": "standalone",

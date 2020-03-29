@@ -72,7 +72,7 @@ const HeaderBar = props => {
 					noWrap
 					className={classes.title}
 				>
-					COVID 19 Tracker
+					US COVID 19 Tracker
 				</Typography>
 			</Toolbar>
 		</AppBar>
