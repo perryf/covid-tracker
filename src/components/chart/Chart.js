@@ -7,7 +7,6 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormLabel from '@material-ui/core/FormLabel'
 import {
 	LineChart,
 	Line,
@@ -36,9 +35,18 @@ const getYLabel = type => {
 }
 
 const useStyles = makeStyles({
+	formControl: {
+		marginBottom: 6
+	},
 	chartOptions: {
 		display: 'flex',
 		flexDirection: 'row'
+	},
+	dataLabel: {
+		fontSize: '0.8rem'
+	},
+	radioButton: {
+		padding: 4
 	}
 })
 
@@ -74,8 +82,7 @@ const Chart = props => {
 
 	return (
 		<React.Fragment>
-			<FormControl>
-				{false && <FormLabel component="legend">Display</FormLabel>}
+			<FormControl className={classes.formControl}>
 				<RadioGroup
 					aria-label="displayOptions"
 					name="displayOptions"
@@ -85,20 +92,36 @@ const Chart = props => {
 				>
 					<FormControlLabel
 						value="positive"
-						control={<Radio />}
-						label="Positives"
+						control={
+							<Radio size="small" classes={{ root: classes.radioButton }} />
+						}
+						classes={{ label: classes.dataLabel }}
+						label="Positive Cases"
 					/>
-					<FormControlLabel value="death" control={<Radio />} label="Deaths" />
+					<FormControlLabel
+						value="death"
+						control={
+							<Radio size="small" classes={{ root: classes.radioButton }} />
+						}
+						classes={{ label: classes.dataLabel }}
+						label="Deaths"
+					/>
 					<FormControlLabel
 						value="totalTestResults"
-						control={<Radio />}
-						label="Total Tested"
+						control={
+							<Radio size="small" classes={{ root: classes.radioButton }} />
+						}
+						classes={{ label: classes.dataLabel }}
+						label="Tested"
 					/>
 
 					<FormControlLabel
 						value="hospitalized"
-						control={<Radio />}
-						label="Total Hospitalized"
+						control={
+							<Radio size="small" classes={{ root: classes.radioButton }} />
+						}
+						classes={{ label: classes.dataLabel }}
+						label="Hospitalized"
 					/>
 				</RadioGroup>
 			</FormControl>

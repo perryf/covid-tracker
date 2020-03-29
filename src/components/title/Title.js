@@ -14,19 +14,17 @@ const formatLink = link => {
 	)
 }
 
-const formatTitle = (selectState, info, currentStats) => {
+const formatTitle = (selectState, info, currentState) => {
 	if (selectState === 'us') {
 		return 'USA'
 	}
 	if (info.name) {
-		return `${info.name} (${info.state}) ${
-			currentStats.grade ? `[grade: ${currentStats.grade}]` : ''
-		}`
+		return `${info.name} (${info.state})`
 	}
 	return 'Select a State'
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
 	linkStyle: {
 		color: '#e33371'
 	},
@@ -34,21 +32,26 @@ const useStyles = makeStyles(theme => ({
 		margin: 4,
 		fontStyle: 'italic'
 	}
-}))
+})
 
 const Title = props => {
 	const { selectStateInfo, selectStateCurrent, selectState } = props
 	const classes = useStyles()
 
-	const title = formatTitle(selectState, selectStateInfo, selectStateCurrent)
+	const title = formatTitle(selectState, selectStateInfo)
 	const primaryLink = formatLink(selectStateInfo.covid19Site)
 	const secondaryLink = formatLink(selectStateInfo.covid19SiteSecondary)
 
 	return (
 		<div>
-			<Typography component="h2" variant="h6" color="primary" gutterBottom>
+			<Typography component="h2" variant="h6" color="primary">
 				{title}
 			</Typography>
+			{selectStateCurrent.grade && (
+				<Typography component="p" variant="caption" color="textSecondary">
+					Data quality grade: {selectStateCurrent.grade}
+				</Typography>
+			)}
 			<div className={classes.linkStyle}>{primaryLink}</div>
 			<div className={classes.linkStyle}>{secondaryLink}</div>
 			<p className={classes.notes}>{selectStateInfo.notes || ''}</p>

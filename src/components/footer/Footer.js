@@ -1,17 +1,22 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import Link from '@material-ui/core/Link'
 import Typography from '@material-ui/core/Typography'
 
 const Footer = () => {
 	return (
-		<Typography variant="body2" color="textSecondary" align="center">
-			{'Copyright © '}
-			<Link color="inherit" href="https://github.com/perryf/covid-tracker">
-				COVID Tracker
-			</Link>{' '}
-			{new Date().getFullYear()}
-			{'.'}
-		</Typography>
+		<Fragment>
+			<Typography variant="body2" color="textSecondary" align="center">
+				<Link color="inherit" href="https://github.com/perryf/covid-tracker">
+					COVID 19 Tracker Source Code
+				</Link>
+			</Typography>
+			<Typography variant="body2" color="textSecondary" align="center">
+				{'All Data from '}
+				<Link color="inherit" href="https://covidtracking.com/">
+					The COVID Tracking Project
+				</Link>
+			</Typography>
+		</Fragment>
 	)
 }
 

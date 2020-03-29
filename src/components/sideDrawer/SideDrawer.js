@@ -54,10 +54,10 @@ const useStyles = makeStyles(theme => ({
 
 const SideDrawer = props => {
 	const {
-		statesInfo,
 		selectState,
-		changeState,
 		sideOpen,
+		statesInfo,
+		changeState,
 		handleDrawerClose
 	} = props
 	const classes = useStyles()
@@ -86,9 +86,11 @@ const SideDrawer = props => {
 				>
 					USA
 				</ListItem>
-				<Divider />
 				{statesInfo.map(info => {
 					const selected = info.state === selectState
+					const label = sideOpen
+						? `${info.name || ''} ${info.state ? `(${info.state})` : ''}`
+						: info.state
 
 					return (
 						<ListItem
@@ -99,7 +101,7 @@ const SideDrawer = props => {
 							)}
 							onClick={() => changeState(info.state)}
 						>
-							{info.name} ({info.state})
+							{label}
 						</ListItem>
 					)
 				})}

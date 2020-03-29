@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
 		paddingBottom: theme.spacing(4)
 	},
 	fixedHeight: {
-		height: 320
+		height: 360
 	},
 	toolbar: {
 		paddingRight: 24 // keep right padding when drawer closed
@@ -80,7 +80,7 @@ const Dashboard = () => {
 	const [usHistoric, setUSHistoric] = useState([])
 	const [chartDisplay, setChartDisplay] = useState('positive')
 	const [selectState, setSelectedState] = useState('us')
-	const [sideOpen, setOpen] = React.useState(true)
+	const [sideOpen, setOpen] = React.useState(false)
 
 	// * Effect
 	useEffect(() => {
@@ -176,7 +176,7 @@ const Dashboard = () => {
 						noWrap
 						className={classes.title}
 					>
-						COVID Tracker
+						COVID 19 Tracker
 					</Typography>
 				</Toolbar>
 			</AppBar>

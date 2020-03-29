@@ -2,3 +2,4 @@
 - Better on modal
 - favicon
 - tab header
+- Improve chart
