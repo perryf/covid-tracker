@@ -1,6 +1,7 @@
 import React from 'react'
-import Link from '@material-ui/core/Link'
 import PropTypes from 'prop-types'
+import { makeStyles } from '@material-ui/core/styles'
+import Link from '@material-ui/core/Link'
 import Typography from '@material-ui/core/Typography'
 
 const formatLink = link => {
@@ -13,21 +14,33 @@ const formatLink = link => {
 	)
 }
 
-const Title = props => {
-	const { selectStateInfo, selectStateCurrent, selectState } = props
-
-	let title = 'Select a State'
-
+const formatTitle = (selectState, info, currentStats) => {
 	if (selectState === 'us') {
-		title = 'USA'
+		return 'USA'
 	}
-
-	if (selectStateInfo.name) {
-		title = `${selectStateInfo.name} (${selectStateInfo.state}) ${
-			selectStateCurrent.grade ? `[grade: ${selectStateCurrent.grade}]` : ''
+	if (info.name) {
+		return `${info.name} (${info.state}) ${
+			currentStats.grade ? `[grade: ${currentStats.grade}]` : ''
 		}`
 	}
+	return 'Select a State'
+}
 
+const useStyles = makeStyles(theme => ({
+	linkStyle: {
+		color: '#e33371'
+	},
+	notes: {
+		margin: 4,
+		fontStyle: 'italic'
+	}
+}))
+
+const Title = props => {
+	const { selectStateInfo, selectStateCurrent, selectState } = props
+	const classes = useStyles()
+
+	const title = formatTitle(selectState, selectStateInfo, selectStateCurrent)
 	const primaryLink = formatLink(selectStateInfo.covid19Site)
 	const secondaryLink = formatLink(selectStateInfo.covid19SiteSecondary)
 
@@ -36,11 +49,9 @@ const Title = props => {
 			<Typography component="h2" variant="h6" color="primary" gutterBottom>
 				{title}
 			</Typography>
-			<div>{primaryLink}</div>
-			<div>{secondaryLink}</div>
-			<p>
-				{selectStateInfo.notes ? `State notes: ${selectStateInfo.notes}` : ''}
-			</p>
+			<div className={classes.linkStyle}>{primaryLink}</div>
+			<div className={classes.linkStyle}>{secondaryLink}</div>
+			<p className={classes.notes}>{selectStateInfo.notes || ''}</p>
 		</div>
 	)
 }

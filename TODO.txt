@@ -1,0 +1,4 @@
+- Disclaimer at bottom about where data came from
+- Better on modal
+- favicon
+- tab header

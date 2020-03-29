@@ -6,7 +6,7 @@ const Footer = () => {
 	return (
 		<Typography variant="body2" color="textSecondary" align="center">
 			{'Copyright © '}
-			<Link color="inherit" href="#">
+			<Link color="inherit" href="https://github.com/perryf/covid-tracker">
 				COVID Tracker
 			</Link>{' '}
 			{new Date().getFullYear()}

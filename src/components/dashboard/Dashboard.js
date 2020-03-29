@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Box from '@material-ui/core/Box'
 import AppBar from '@material-ui/core/AppBar'
+import Box from '@material-ui/core/Box'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Chart from '../chart/Chart'
+import Container from '@material-ui/core/Container'
+import Footer from '../footer/Footer'
+import IconButton from '@material-ui/core/IconButton'
+import Grid from '@material-ui/core/Grid'
+import MenuIcon from '@material-ui/icons/Menu'
+import Paper from '@material-ui/core/Paper'
+import SideDrawer from '../sideDrawer/SideDrawer'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
 import { urlStates, urlDaily, urlInfo, urlUSCurrent, urlUSHistoric } from 'data'
-import Chart from '../chart/Chart'
-import SideDrawer from '../sideDrawer/SideDrawer'
 import TableDisplay from '../tableDisplay/TableDisplay'
-import Footer from '../footer/Footer'
 import Title from '../title/Title'
 
 const drawerWidth = 240
@@ -23,14 +25,19 @@ const useStyles = makeStyles(theme => ({
 		display: 'flex'
 	},
 	appBar: {
-		zIndex: theme.zIndex.drawer + 1
+		zIndex: theme.zIndex.drawer + 1,
+		transition: theme.transitions.create(['width', 'margin'], {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.leavingScreen
+		})
 	},
 	appBarShift: {
 		marginLeft: drawerWidth,
-		width: `calc(100% - ${drawerWidth}px)`
-	},
-	title: {
-		flexGrow: 1
+		width: `calc(100% - ${drawerWidth}px)`,
+		transition: theme.transitions.create(['width', 'margin'], {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.enteringScreen
+		})
 	},
 	appBarSpacer: theme.mixins.toolbar,
 	content: {
@@ -42,14 +49,26 @@ const useStyles = makeStyles(theme => ({
 		paddingTop: theme.spacing(4),
 		paddingBottom: theme.spacing(4)
 	},
+	fixedHeight: {
+		height: 320
+	},
+	toolbar: {
+		paddingRight: 24 // keep right padding when drawer closed
+	},
+	menuButton: {
+		marginRight: 36
+	},
+	menuButtonHidden: {
+		display: 'none'
+	},
 	paper: {
 		padding: theme.spacing(2),
 		display: 'flex',
 		overflow: 'auto',
 		flexDirection: 'column'
 	},
-	fixedHeight: {
-		height: 320
+	title: {
+		flexGrow: 1
 	}
 }))
 
@@ -61,6 +80,7 @@ const Dashboard = () => {
 	const [usHistoric, setUSHistoric] = useState([])
 	const [chartDisplay, setChartDisplay] = useState('positive')
 	const [selectState, setSelectedState] = useState('us')
+	const [sideOpen, setOpen] = React.useState(true)
 
 	// * Effect
 	useEffect(() => {
@@ -106,9 +126,19 @@ const Dashboard = () => {
 		setChartDisplay(value)
 	}
 
+	const handleDrawerClose = () => {
+		setOpen(false)
+	}
+
+	const handleDrawerOpen = () => {
+		setOpen(true)
+	}
+
+	// * STYLES
 	const classes = useStyles()
 	const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
+	// * INCLUDES US TOTALS WITH STATES
 	const selectStateCurrent =
 		selectState === 'us'
 			? usCurrent[0]
@@ -124,9 +154,21 @@ const Dashboard = () => {
 			<CssBaseline />
 			<AppBar
 				position="absolute"
-				className={clsx(classes.appBar, classes.appBarShift)}
+				className={clsx(classes.appBar, sideOpen && classes.appBarShift)}
 			>
 				<Toolbar className={classes.toolbar}>
+					<IconButton
+						edge="start"
+						color="inherit"
+						aria-label="open drawer"
+						onClick={handleDrawerOpen}
+						className={clsx(
+							classes.menuButton,
+							sideOpen && classes.menuButtonHidden
+						)}
+					>
+						<MenuIcon />
+					</IconButton>
 					<Typography
 						component="h1"
 						variant="h6"
@@ -141,9 +183,11 @@ const Dashboard = () => {
 
 			{/* Sidebar */}
 			<SideDrawer
-				changeState={changeState}
+				sideOpen={sideOpen}
 				statesInfo={statesInfo}
 				selectState={selectState}
+				changeState={changeState}
+				handleDrawerClose={handleDrawerClose}
 			/>
 
 			<main className={classes.content}>
@@ -174,7 +218,7 @@ const Dashboard = () => {
 						</Grid>
 
 						{/* Recent Table */}
-						<Grid item xs={12}>
+						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={classes.paper}>
 								<TableDisplay
 									selectStateCurrent={selectStateCurrent}
