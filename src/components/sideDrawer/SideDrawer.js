@@ -46,7 +46,8 @@ const useStyles = makeStyles(theme => ({
 	toolbarIcon: {
 		display: 'flex',
 		alignItems: 'center',
-		justifyContent: 'flex-end'
+		justifyContent: 'flex-end',
+		height: 48
 	}
 }))
 
