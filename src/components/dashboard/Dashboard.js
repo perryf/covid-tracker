@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
@@ -9,7 +10,6 @@ import Footer from '../footer/Footer'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import SideDrawer from '../sideDrawer/SideDrawer'
-import { urlStates, urlDaily, urlInfo, urlUSCurrent, urlUSHistoric } from 'data'
 import HeaderBar from '../headerBar/HeaderBar'
 import TableDisplay from '../tableDisplay/TableDisplay'
 import StateInfo from '../stateInfo/StateInfo'
@@ -41,52 +41,19 @@ const useStyles = makeStyles(theme => ({
 	}
 }))
 
-const Dashboard = () => {
-	const [statesCurrent, setCurrentStates] = useState([])
-	const [statesHistoric, setHistoricStates] = useState([])
-	const [statesInfo, setInfoStates] = useState([])
-	const [usCurrent, setUSCurrent] = useState([])
-	const [usHistoric, setUSHistoric] = useState([])
+const Dashboard = props => {
+	const {
+		statesCurrent,
+		statesHistoric,
+		statesInfo,
+		usCurrent,
+		usHistoric
+	} = props
+
 	const [chartDisplay, setChartDisplay] = useState('positive')
 	const [chartDateRange, setChartDateRange] = useState('total')
 	const [selectState, setSelectedState] = useState('us')
 	const [sideOpen, setOpen] = React.useState(false)
-
-	// * Effect
-	useEffect(() => {
-		fetch(urlStates)
-			.then(res => res.json())
-			.then(json => setCurrentStates(json))
-			.catch(err => console.info(err))
-
-		fetch(urlDaily)
-			.then(res => res.json())
-			.then(json => setHistoricStates(json))
-			.catch(err => console.info(err))
-
-		fetch(urlInfo)
-			.then(res => res.json())
-			.then(json =>
-				setInfoStates(
-					json.sort((a, b) => {
-						if (a.name < b.name) return -1
-						if (b.name < a.name) return 1
-						return 0
-					})
-				)
-			)
-			.catch(err => console.info(err))
-
-		fetch(urlUSCurrent)
-			.then(res => res.json())
-			.then(json => setUSCurrent(json))
-			.catch(err => console.info(err))
-
-		fetch(urlUSHistoric)
-			.then(res => res.json())
-			.then(json => setUSHistoric(json))
-			.catch(err => console.info(err))
-	}, [])
 
 	const changeState = stateAbr => {
 		setSelectedState(stateAbr)
@@ -173,6 +140,22 @@ const Dashboard = () => {
 			</main>
 		</div>
 	)
+}
+
+Dashboard.propTypes = {
+	statesCurrent: PropTypes.array,
+	statesHistoric: PropTypes.array,
+	statesInfo: PropTypes.array,
+	usCurrent: PropTypes.array,
+	usHistoric: PropTypes.array
+}
+
+Dashboard.defaultProps = {
+	statesCurrent: [],
+	statesHistoric: [],
+	statesInfo: [],
+	usCurrent: [],
+	usHistoric: []
 }
 
 export default Dashboard
