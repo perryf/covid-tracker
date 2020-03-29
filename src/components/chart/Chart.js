@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import { makeStyles } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/core/styles'
 import {
 	AreaChart,
 	Area,
+	LineChart,
+	Line,
 	XAxis,
 	YAxis,
 	Label,
@@ -28,6 +29,19 @@ const getYLabel = type => {
 
 		case 'hospitalized':
 			return 'Total Hospitalized'
+
+		case 'positiveIncrease':
+			return 'Daily of Positive Cases'
+
+		case 'deathIncrease':
+			return 'Daily of Deaths'
+
+		case 'totalTestResultsIncrease':
+			return 'Daily of Test Results'
+
+		case 'hospitalizedIncrease':
+			return 'Daily of Hospitalized Patients'
+
 		default:
 			return ''
 	}
@@ -67,7 +81,7 @@ const Chart = props => {
 	const theme = useTheme()
 
 	const displayType = chartDisplay || 'positive'
-	const yLabel = getYLabel(displayType)
+	const isAreaChart = !chartDisplay.includes('Increase')
 
 	const data = selectStateHistory
 		.filter(day => filterDateRange(day, chartDateRange))
@@ -80,60 +94,81 @@ const Chart = props => {
 			)
 		})
 
+	// * Chart Customized Inserts
+	const xAxis = <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
+	const yAxis = (
+		<YAxis stroke={theme.palette.text.secondary}>
+			<Label
+				angle={270}
+				position="left"
+				style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
+			>
+				{getYLabel(displayType)}
+			</Label>
+		</YAxis>
+	)
+	const cartesianGrid = <CartesianGrid strokeDasharray="3 3" />
+	const toolTip = <Tooltip />
+
+	// * Chart Gradients (for Area Chart)
+	const chartGradients = (
+		<defs>
+			<linearGradient id="main" x1="0" y1="0" x2="0" y2="1">
+				<stop
+					offset="5%"
+					stopColor={theme.palette.primary.main}
+					stopOpacity={0.8}
+				/>
+				<stop
+					offset="95%"
+					stopColor={theme.palette.primary.main}
+					stopOpacity={0}
+				/>
+			</linearGradient>
+		</defs>
+	)
+
 	return (
 		<Fragment>
 			<ChartFilters {...props} />
 
 			<ResponsiveContainer minHeight={290}>
-				<AreaChart
-					data={data}
-					margin={{
-						top: 8,
-						right: 8,
-						bottom: 0,
-						left: 12
-					}}
-				>
-					<defs>
-						<linearGradient id="main" x1="0" y1="0" x2="0" y2="1">
-							<stop
-								offset="5%"
-								stopColor={theme.palette.primary.main}
-								stopOpacity={0.8}
-							/>
-							<stop
-								offset="95%"
-								stopColor={theme.palette.primary.main}
-								stopOpacity={0}
-							/>
-						</linearGradient>
-					</defs>
+				{isAreaChart ? (
+					<AreaChart
+						data={data}
+						margin={{ top: 8, right: 8, bottom: 0, left: 12 }}
+					>
+						{chartGradients}
+						{xAxis}
+						{yAxis}
+						{cartesianGrid}
+						{toolTip}
 
-					<XAxis dataKey="time" stroke={theme.palette.text.secondary} />
-					<YAxis stroke={theme.palette.text.secondary}>
-						<Label
-							angle={270}
-							position="left"
-							style={{
-								textAnchor: 'middle',
-								fill: theme.palette.text.primary
-							}}
-						>
-							{yLabel}
-						</Label>
-					</YAxis>
-
-					<CartesianGrid strokeDasharray="3 3" />
-					<Tooltip />
-
-					<Area
-						type="linear"
-						dataKey="amount"
-						stroke={theme.palette.primary.main}
-						fillOpacity={1}
-						fill="url(#main)"
-					/>
-				</AreaChart>
+						<Area
+							type="linear"
+							dataKey="amount"
+							stroke={theme.palette.primary.main}
+							fillOpacity={1}
+							fill="url(#main)"
+						/>
+					</AreaChart>
+				) : (
+					<LineChart
+						data={data}
+						margin={{ top: 8, right: 8, bottom: 0, left: 12 }}
+					>
+						{xAxis}
+						{yAxis}
+						{cartesianGrid}
+						{toolTip}
+						<Line
+							type="linear"
+							dataKey="amount"
+							stroke={theme.palette.primary.main}
+							dot={false}
+						/>
+					</LineChart>
+				)}
 			</ResponsiveContainer>
 		</Fragment>
 	)
@@ -152,83 +187,11 @@ Chart.propTypes = {
 
 Chart.defaultProps = {
 	selectState: '',
+	chartDisplay: '',
+	chartDateRange: '',
 	selectStateInfo: {},
 	selectStateCurrent: {},
 	selectStateHistory: []
 }
 
 export default Chart
-
-// <LineChart
-// 	data={data}
-// 	margin={{
-// 		top: 8,
-// 		right: 8,
-// 		bottom: 0,
-// 		left: 12
-// 	}}
-// >
-// 	<XAxis dataKey="time" stroke={theme.palette.text.secondary} />
-// 	<YAxis stroke={theme.palette.text.secondary}>
-// 		<Label
-// 			angle={270}
-// 			position="left"
-// 			style={{
-// 				textAnchor: 'middle',
-// 				fill: theme.palette.text.primary
-// 			}}
-// 		>
-// 			{yLabel}
-// 		</Label>
-// 	</YAxis>
-// 	<Line
-// 		type="monotone"
-// 		dataKey="amount"
-// 		stroke={theme.palette.primary.main}
-// 		dot={false}
-// 	/>
-// </LineChart>
-
-// <FormControl className={classes.formControl}>
-// 	<RadioGroup
-// 		aria-label="displayOptions"
-// 		name="displayOptions"
-// 		className={classes.chartOptions}
-// 		value={chartDisplay}
-// 		onChange={changeChartDisplay}
-// 	>
-// 		<FormControlLabel
-// 			value="positive"
-// 			control={
-// 				<Radio size="small" classes={{ root: classes.radioButton }} />
-// 			}
-// 			classes={{ label: classes.dataLabel }}
-// 			label="Positive Cases"
-// 		/>
-// 		<FormControlLabel
-// 			value="death"
-// 			control={
-// 				<Radio size="small" classes={{ root: classes.radioButton }} />
-// 			}
-// 			classes={{ label: classes.dataLabel }}
-// 			label="Deaths"
-// 		/>
-// 		<FormControlLabel
-// 			value="totalTestResults"
-// 			control={
-// 				<Radio size="small" classes={{ root: classes.radioButton }} />
-// 			}
-// 			classes={{ label: classes.dataLabel }}
-// 			label="Tested"
-// 		/>
-
-// 		<FormControlLabel
-// 			value="hospitalized"
-// 			control={
-// 				<Radio size="small" classes={{ root: classes.radioButton }} />
-// 			}
-// 			classes={{ label: classes.dataLabel }}
-// 			label="Hospitalized"
-// 		/>
-// 	</RadioGroup>
-// </FormControl>
