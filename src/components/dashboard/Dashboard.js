@@ -20,62 +20,64 @@ import Title from '../title/Title'
 
 const drawerWidth = 240
 
-const useStyles = makeStyles(theme => ({
-	root: {
-		display: 'flex'
-	},
-	appBar: {
-		zIndex: theme.zIndex.drawer + 1,
-		transition: theme.transitions.create(['width', 'margin'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen
-		})
-	},
-	appBarShift: {
-		marginLeft: drawerWidth,
-		width: `calc(100% - ${drawerWidth}px)`,
-		transition: theme.transitions.create(['width', 'margin'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen
-		})
-	},
-	appBarSpacer: theme.mixins.toolbar,
-	content: {
-		flexGrow: 1,
-		height: '100vh',
-		overflow: 'auto'
-	},
-	container: {
-		paddingTop: theme.spacing(4),
-		paddingBottom: theme.spacing(4)
-	},
-	toolbar: {
-		paddingRight: 24 // keep right padding when drawer closed
-	},
-	menuButton: {
-		marginRight: 36,
-		[theme.breakpoints.down('sm')]: {
+const useStyles = makeStyles(theme => {
+	return {
+		root: {
+			display: 'flex'
+		},
+		appBar: {
+			zIndex: theme.zIndex.drawer + 1,
+			transition: theme.transitions.create(['width', 'margin'], {
+				easing: theme.transitions.easing.sharp,
+				duration: theme.transitions.duration.leavingScreen
+			})
+		},
+		appBarShift: {
+			marginLeft: drawerWidth,
+			width: `calc(100% - ${drawerWidth}px)`,
+			transition: theme.transitions.create(['width', 'margin'], {
+				easing: theme.transitions.easing.sharp,
+				duration: theme.transitions.duration.enteringScreen
+			})
+		},
+		appBarSpacer: theme.mixins.toolbar, // Moves main down by amount appBar takes up
+		content: {
+			flexGrow: 1,
+			height: '100vh',
+			overflow: 'auto'
+		},
+		container: {
+			paddingTop: theme.spacing(1),
+			paddingBottom: theme.spacing(1)
+		},
+		toolbar: {
+			paddingRight: 24 // keep right padding when drawer closed
+		},
+		menuButton: {
+			marginRight: 36,
+			[theme.breakpoints.down('xs')]: {
+				display: 'none'
+			}
+		},
+		menuButtonHidden: {
 			display: 'none'
+		},
+		paper: {
+			padding: theme.spacing(2),
+			display: 'flex',
+			flexDirection: 'column'
+		},
+		chartPaper: {
+			height: 360
+		},
+		tablePaper: {
+			overflow: 'auto'
+		},
+		title: {
+			flexGrow: 1
 		}
-	},
-	menuButtonHidden: {
-		display: 'none'
-	},
-	paper: {
-		padding: theme.spacing(2),
-		display: 'flex',
-		flexDirection: 'column'
-	},
-	chartPaper: {
-		height: 360
-	},
-	tablePaper: {
-		overflow: 'auto'
-	},
-	title: {
-		flexGrow: 1
 	}
-}))
+})
 
 const Dashboard = () => {
 	const [statesCurrent, setCurrentStates] = useState([])
@@ -161,7 +163,7 @@ const Dashboard = () => {
 				position="absolute"
 				className={clsx(classes.appBar, sideOpen && classes.appBarShift)}
 			>
-				<Toolbar className={classes.toolbar}>
+				<Toolbar className={classes.toolbar} variant="dense">
 					<IconButton
 						edge="start"
 						color="inherit"

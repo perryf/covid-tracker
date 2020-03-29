@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 			duration: theme.transitions.duration.leavingScreen
 		}),
 		width: theme.spacing(7),
-		[theme.breakpoints.up('sm')]: {
+		[theme.breakpoints.up('xs')]: {
 			width: theme.spacing(9)
 		}
 	},
@@ -46,9 +46,7 @@ const useStyles = makeStyles(theme => ({
 	toolbarIcon: {
 		display: 'flex',
 		alignItems: 'center',
-		justifyContent: 'flex-end',
-		padding: '0 8px',
-		...theme.mixins.toolbar
+		justifyContent: 'flex-end'
 	}
 }))
 

@@ -60,10 +60,10 @@ const TableDisplay = props => {
 									: ''}
 							</TableCell>
 							<TableCell>
-								{row.death || 0} (+{row.death || 0})
+								{row.death || 0} (+{row.deathIncrease || 0})
 							</TableCell>
 							<TableCell>
-								{row.hospitalized || 0} (+{row.hospitalized || 0})
+								{row.hospitalized || 0} (+{row.hospitalizedIncrease || 0})
 							</TableCell>
 						</TableRow>
 					))}
