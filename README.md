@@ -1,19 +1,27 @@
-# COVID Tracker
+# US COVID 19 Tracker
 
-## Available Scripts
+Dashboard view of COVID 19 virus in the United States
+Data from <https://covidtracking.com/api/>
 
-npm run start
+## Installation
 
-### Links
+- git clone this project
+- cd into project folder
+- npm run start
 
-- <https://covidtracking.com/api/>
+## Built With
 
-### Tools
-
-- react
-- redux ?
-- material-ui
+- reactjs
+- material-ui (dashboard template)
 - recharts
 - moment
 - clsx
-- gh-pages
+- git
+
+## Authors
+
+- **Perry Fustero**
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details
