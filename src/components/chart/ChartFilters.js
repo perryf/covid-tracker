@@ -43,13 +43,11 @@ const ChartFilters = props => {
 					<option value="death">Total Deaths</option>
 					<option value="totalTestResults">Total Tested</option>
 					<option value="hospitalized">Total Hospitalized</option>
-					<option value="positiveIncrease">Daily of Positive Cases</option>
-					<option value="deathIncrease">Daily of Deaths</option>
-					<option value="totalTestResultsIncrease">
-						Daily of Test Results
-					</option>
+					<option value="positiveIncrease">New Positive Cases</option>
+					<option value="deathIncrease">New Deaths</option>
+					<option value="totalTestResultsIncrease">New Test Results</option>
 					<option value="hospitalizedIncrease">
-						Daily of Hospitalized Patients
+						New Hospitalized Patients
 					</option>
 				</Select>
 			</FormControl>

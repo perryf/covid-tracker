@@ -16,7 +16,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import { urlStates, urlDaily, urlInfo, urlUSCurrent, urlUSHistoric } from 'data'
 import TableDisplay from '../tableDisplay/TableDisplay'
-import Title from '../title/Title'
+import StateInfo from '../stateInfo/StateInfo'
 
 const drawerWidth = 240
 
@@ -201,9 +201,9 @@ const Dashboard = () => {
 				<div className={classes.appBarSpacer} />
 				<Container maxWidth="lg" className={classes.container}>
 					<Grid container spacing={2}>
-						{/* Title */}
+						{/* StateInfo */}
 						<Grid item xs={12} md={12} lg={12}>
-							<Title
+							<StateInfo
 								selectState={selectState}
 								selectStateInfo={selectStateInfo}
 								selectStateCurrent={selectStateCurrent}
@@ -214,10 +214,7 @@ const Dashboard = () => {
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={clsx(classes.paper, classes.chartPaper)}>
 								<Chart
-									selectStateCurrent={selectStateCurrent}
 									selectStateHistory={selectStateHistory}
-									selectStateInfo={selectStateInfo}
-									selectState={selectState}
 									chartDisplay={chartDisplay}
 									chartDateRange={chartDateRange}
 									changeChartDisplay={changeChartDisplay}
@@ -229,12 +226,7 @@ const Dashboard = () => {
 						{/* Recent Table */}
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={clsx(classes.paper, classes.tablePaper)}>
-								<TableDisplay
-									selectStateCurrent={selectStateCurrent}
-									selectStateHistory={selectStateHistory}
-									selectStateInfo={selectStateInfo}
-									selectState={selectState}
-								/>
+								<TableDisplay selectStateHistory={selectStateHistory} />
 							</Paper>
 						</Grid>
 					</Grid>

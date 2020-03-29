@@ -31,16 +31,16 @@ const getYLabel = type => {
 			return 'Total Hospitalized'
 
 		case 'positiveIncrease':
-			return 'Daily of Positive Cases'
+			return 'New Positive Cases'
 
 		case 'deathIncrease':
-			return 'Daily of Deaths'
+			return 'New Deaths'
 
 		case 'totalTestResultsIncrease':
-			return 'Daily of Test Results'
+			return 'New Test Results'
 
 		case 'hospitalizedIncrease':
-			return 'Daily of Hospitalized Patients'
+			return 'New Hospitalized Patients'
 
 		default:
 			return ''
@@ -51,12 +51,10 @@ const filterDateRange = (dayObj, dateType) => {
 	switch (dateType) {
 		case 'week':
 			const lastWeek = moment().subtract(7, 'days')
-
 			return moment(dayObj.dateChecked).isAfter(lastWeek)
 
 		case 'month':
 			const lastMonth = moment().subtract(1, 'months')
-
 			return moment(dayObj.dateChecked).isAfter(lastMonth)
 
 		default:
@@ -69,20 +67,14 @@ const createData = (time, amount) => {
 }
 
 const Chart = props => {
-	const {
-		selectStateInfo,
-		selectStateCurrent,
-		selectStateHistory,
-		selectState,
-		chartDisplay,
-		chartDateRange
-	} = props
-
+	const { selectStateHistory, chartDisplay, chartDateRange } = props
 	const theme = useTheme()
 
+	// * Chart/Filter Display Options
 	const displayType = chartDisplay || 'positive'
 	const isAreaChart = !chartDisplay.includes('Increase')
 
+	// * Chart Data
 	const data = selectStateHistory
 		.filter(day => filterDateRange(day, chartDateRange))
 		.slice()
@@ -143,7 +135,6 @@ const Chart = props => {
 						{yAxis}
 						{cartesianGrid}
 						{toolTip}
-
 						<Area
 							type="linear"
 							dataKey="amount"
@@ -175,22 +166,16 @@ const Chart = props => {
 }
 
 Chart.propTypes = {
-	selectStateInfo: PropTypes.object,
-	selectStateCurrent: PropTypes.object,
 	selectStateHistory: PropTypes.array,
-	selectState: PropTypes.string,
 	chartDisplay: PropTypes.string,
 	chartDateRange: PropTypes.string,
-	changeChartDisplay: PropTypes.func.isRequired,
-	changeChartDateRange: PropTypes.func.isRequired
+	changeChartDisplay: PropTypes.func.isRequired, // * Passed down to Filters
+	changeChartDateRange: PropTypes.func.isRequired // * Passed down to Filters
 }
 
 Chart.defaultProps = {
-	selectState: '',
 	chartDisplay: '',
 	chartDateRange: '',
-	selectStateInfo: {},
-	selectStateCurrent: {},
 	selectStateHistory: []
 }
 
