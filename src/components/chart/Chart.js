@@ -7,19 +7,23 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Select from '@material-ui/core/Select'
 import {
-	LineChart,
-	Line,
+	AreaChart,
+	Area,
 	XAxis,
 	YAxis,
 	Label,
+	CartesianGrid,
+	Tooltip,
+	LabelList,
 	ResponsiveContainer
 } from 'recharts'
 
 const getYLabel = type => {
 	switch (type) {
 		case 'positive':
-			return 'Total Positive'
+			return 'Total Tested Positive'
 
 		case 'death':
 			return 'Total Deaths'
@@ -34,9 +38,32 @@ const getYLabel = type => {
 	}
 }
 
+const filterDateRange = (dayObj, dateType) => {
+	switch (dateType) {
+		case 'week':
+			const lastWeek = moment().subtract(7, 'days')
+
+			return moment(dayObj.dateChecked).isAfter(lastWeek)
+
+		case 'month':
+			const lastMonth = moment().subtract(1, 'months')
+
+			return moment(dayObj.dateChecked).isAfter(lastMonth)
+
+		default:
+			return true
+	}
+}
+
 const useStyles = makeStyles({
-	formControl: {
-		marginBottom: 6
+	chartInputs: {
+		marginBottom: 6,
+		display: 'flex',
+		flexDirection: 'row'
+	},
+	chartInput: {
+		margin: '0 6px',
+		padding: 2
 	},
 	chartOptions: {
 		display: 'flex',
@@ -61,7 +88,9 @@ const Chart = props => {
 		selectStateHistory,
 		selectState,
 		chartDisplay,
-		changeChartDisplay
+		chartDateRange,
+		changeChartDisplay,
+		changeChartDateRange
 	} = props
 
 	const theme = useTheme()
@@ -71,6 +100,7 @@ const Chart = props => {
 	const yLabel = getYLabel(displayType)
 
 	const data = selectStateHistory
+		.filter(day => filterDateRange(day, chartDateRange))
 		.slice()
 		.reverse()
 		.map(day => {
@@ -82,52 +112,91 @@ const Chart = props => {
 
 	return (
 		<React.Fragment>
-			<FormControl className={classes.formControl}>
-				<RadioGroup
-					aria-label="displayOptions"
-					name="displayOptions"
-					className={classes.chartOptions}
-					value={chartDisplay}
-					onChange={changeChartDisplay}
-				>
-					<FormControlLabel
-						value="positive"
-						control={
-							<Radio size="small" classes={{ root: classes.radioButton }} />
-						}
-						classes={{ label: classes.dataLabel }}
-						label="Positive Cases"
-					/>
-					<FormControlLabel
-						value="death"
-						control={
-							<Radio size="small" classes={{ root: classes.radioButton }} />
-						}
-						classes={{ label: classes.dataLabel }}
-						label="Deaths"
-					/>
-					<FormControlLabel
-						value="totalTestResults"
-						control={
-							<Radio size="small" classes={{ root: classes.radioButton }} />
-						}
-						classes={{ label: classes.dataLabel }}
-						label="Tested"
-					/>
+			<div className={classes.chartInputs}>
+				<FormControl>
+					<Select
+						native
+						value={chartDisplay}
+						onChange={changeChartDisplay}
+						className={classes.chartInput}
+						inputProps={{
+							name: 'display',
+							id: 'chartDisplayOptions'
+						}}
+					>
+						<option value="positive">Positive Cases</option>
+						<option value="death">Deaths</option>
+						<option value="totalTestResults">Total Tested</option>
+						<option value="hospitalized">Hospitalized</option>
+					</Select>
+				</FormControl>
 
-					<FormControlLabel
-						value="hospitalized"
-						control={
-							<Radio size="small" classes={{ root: classes.radioButton }} />
-						}
-						classes={{ label: classes.dataLabel }}
-						label="Hospitalized"
-					/>
-				</RadioGroup>
-			</FormControl>
+				<FormControl>
+					<Select
+						native
+						value={chartDateRange}
+						onChange={changeChartDateRange}
+						className={classes.chartInput}
+						inputProps={{
+							name: 'date',
+							id: 'chartDateOptions'
+						}}
+					>
+						<option value="week">Past Week</option>
+						<option value="month">Past Month</option>
+						<option value="total">Total</option>
+					</Select>
+				</FormControl>
+			</div>
 
-			<ResponsiveContainer>
-				<LineChart
+			{false && (
+				<FormControl className={classes.formControl}>
+					<RadioGroup
+						aria-label="displayOptions"
+						name="displayOptions"
+						className={classes.chartOptions}
+						value={chartDisplay}
+						onChange={changeChartDisplay}
+					>
+						<FormControlLabel
+							value="positive"
+							control={
+								<Radio size="small" classes={{ root: classes.radioButton }} />
+							}
+							classes={{ label: classes.dataLabel }}
+							label="Positive Cases"
+						/>
+						<FormControlLabel
+							value="death"
+							control={
+								<Radio size="small" classes={{ root: classes.radioButton }} />
+							}
+							classes={{ label: classes.dataLabel }}
+							label="Deaths"
+						/>
+						<FormControlLabel
+							value="totalTestResults"
+							control={
+								<Radio size="small" classes={{ root: classes.radioButton }} />
+							}
+							classes={{ label: classes.dataLabel }}
+							label="Tested"
+						/>
+
+						<FormControlLabel
+							value="hospitalized"
+							control={
+								<Radio size="small" classes={{ root: classes.radioButton }} />
+							}
+							classes={{ label: classes.dataLabel }}
+							label="Hospitalized"
+						/>
+					</RadioGroup>
+				</FormControl>
+			)}
+
+			<ResponsiveContainer minHeight={290}>
+				<AreaChart
 					data={data}
 					margin={{
 						top: 8,
@@ -136,6 +205,21 @@ const Chart = props => {
 						left: 12
 					}}
 				>
+					<defs>
+						<linearGradient id="main" x1="0" y1="0" x2="0" y2="1">
+							<stop
+								offset="5%"
+								stopColor={theme.palette.primary.main}
+								stopOpacity={0.8}
+							/>
+							<stop
+								offset="95%"
+								stopColor={theme.palette.primary.main}
+								stopOpacity={0}
+							/>
+						</linearGradient>
+					</defs>
+
 					<XAxis dataKey="time" stroke={theme.palette.text.secondary} />
 					<YAxis stroke={theme.palette.text.secondary}>
 						<Label
@@ -149,13 +233,26 @@ const Chart = props => {
 							{yLabel}
 						</Label>
 					</YAxis>
-					<Line
-						type="monotone"
+
+					<CartesianGrid strokeDasharray="3 3" />
+					<Tooltip />
+
+					<Area
+						type="linear"
 						dataKey="amount"
 						stroke={theme.palette.primary.main}
-						dot={false}
-					/>
-				</LineChart>
+						fillOpacity={1}
+						fill="url(#main)"
+					>
+						{false && (
+							<LabelList
+								dataKey="amount"
+								position="top"
+								style={{ fontSize: 10 }}
+							/>
+						)}
+					</Area>
+				</AreaChart>
 			</ResponsiveContainer>
 		</React.Fragment>
 	)
@@ -164,10 +261,12 @@ const Chart = props => {
 Chart.propTypes = {
 	selectState: PropTypes.string,
 	chartDisplay: PropTypes.string,
+	chartDateRange: PropTypes.string,
 	selectStateInfo: PropTypes.object,
 	selectStateCurrent: PropTypes.object,
 	selectStateHistory: PropTypes.array,
-	changeChartDisplay: PropTypes.func.isRequired
+	changeChartDisplay: PropTypes.func.isRequired,
+	changeChartDateRange: PropTypes.func.isRequired
 }
 
 Chart.defaultProps = {
@@ -178,3 +277,33 @@ Chart.defaultProps = {
 }
 
 export default Chart
+
+// <LineChart
+// 	data={data}
+// 	margin={{
+// 		top: 8,
+// 		right: 8,
+// 		bottom: 0,
+// 		left: 12
+// 	}}
+// >
+// 	<XAxis dataKey="time" stroke={theme.palette.text.secondary} />
+// 	<YAxis stroke={theme.palette.text.secondary}>
+// 		<Label
+// 			angle={270}
+// 			position="left"
+// 			style={{
+// 				textAnchor: 'middle',
+// 				fill: theme.palette.text.primary
+// 			}}
+// 		>
+// 			{yLabel}
+// 		</Label>
+// 	</YAxis>
+// 	<Line
+// 		type="monotone"
+// 		dataKey="amount"
+// 		stroke={theme.palette.primary.main}
+// 		dot={false}
+// 	/>
+// </LineChart>

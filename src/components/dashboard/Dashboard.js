@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
 		flexDirection: 'column'
 	},
 	chartPaper: {
-		height: 320
+		height: 360
 	},
 	tablePaper: {
 		overflow: 'auto'
@@ -84,6 +84,7 @@ const Dashboard = () => {
 	const [usCurrent, setUSCurrent] = useState([])
 	const [usHistoric, setUSHistoric] = useState([])
 	const [chartDisplay, setChartDisplay] = useState('positive')
+	const [chartDateRange, setChartDateRange] = useState('total')
 	const [selectState, setSelectedState] = useState('us')
 	const [sideOpen, setOpen] = React.useState(false)
 
@@ -126,15 +127,15 @@ const Dashboard = () => {
 	const changeState = stateAbr => {
 		setSelectedState(stateAbr)
 	}
-
 	const changeChartDisplay = ({ target: { value } }) => {
 		setChartDisplay(value)
 	}
-
+	const changeChartDateRange = ({ target: { value } }) => {
+		setChartDateRange(value)
+	}
 	const handleDrawerClose = () => {
 		setOpen(false)
 	}
-
 	const handleDrawerOpen = () => {
 		setOpen(true)
 	}
@@ -216,7 +217,9 @@ const Dashboard = () => {
 									selectStateInfo={selectStateInfo}
 									selectState={selectState}
 									chartDisplay={chartDisplay}
+									chartDateRange={chartDateRange}
 									changeChartDisplay={changeChartDisplay}
+									changeChartDateRange={changeChartDateRange}
 								/>
 							</Paper>
 						</Grid>
