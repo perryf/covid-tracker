@@ -67,7 +67,6 @@ const useStyles = makeStyles(theme => ({
 		flexDirection: 'column'
 	},
 	chartPaper: {
-		touchAction: 'none',
 		height: 320
 	},
 	tablePaper: {
