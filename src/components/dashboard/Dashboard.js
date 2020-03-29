@@ -49,14 +49,14 @@ const useStyles = makeStyles(theme => ({
 		paddingTop: theme.spacing(4),
 		paddingBottom: theme.spacing(4)
 	},
-	fixedHeight: {
-		height: 360
-	},
 	toolbar: {
 		paddingRight: 24 // keep right padding when drawer closed
 	},
 	menuButton: {
-		marginRight: 36
+		marginRight: 36,
+		[theme.breakpoints.down('sm')]: {
+			display: 'none'
+		}
 	},
 	menuButtonHidden: {
 		display: 'none'
@@ -64,8 +64,14 @@ const useStyles = makeStyles(theme => ({
 	paper: {
 		padding: theme.spacing(2),
 		display: 'flex',
-		overflow: 'auto',
 		flexDirection: 'column'
+	},
+	chartPaper: {
+		touchAction: 'none',
+		height: 320
+	},
+	tablePaper: {
+		overflow: 'auto'
 	},
 	title: {
 		flexGrow: 1
@@ -136,7 +142,6 @@ const Dashboard = () => {
 
 	// * STYLES
 	const classes = useStyles()
-	const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
 	// * INCLUDES US TOTALS WITH STATES
 	const selectStateCurrent =
@@ -205,7 +210,7 @@ const Dashboard = () => {
 
 						{/* Chart */}
 						<Grid item xs={12} md={12} lg={12}>
-							<Paper className={fixedHeightPaper}>
+							<Paper className={clsx(classes.paper, classes.chartPaper)}>
 								<Chart
 									selectStateCurrent={selectStateCurrent}
 									selectStateHistory={selectStateHistory}
@@ -219,7 +224,7 @@ const Dashboard = () => {
 
 						{/* Recent Table */}
 						<Grid item xs={12} md={12} lg={12}>
-							<Paper className={classes.paper}>
+							<Paper className={clsx(classes.paper, classes.tablePaper)}>
 								<TableDisplay
 									selectStateCurrent={selectStateCurrent}
 									selectStateHistory={selectStateHistory}

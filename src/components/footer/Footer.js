@@ -11,7 +11,7 @@ const Footer = () => {
 				</Link>
 			</Typography>
 			<Typography variant="body2" color="textSecondary" align="center">
-				{'All Data from '}
+				{'All data from '}
 				<Link color="inherit" href="https://covidtracking.com/">
 					The COVID Tracking Project
 				</Link>
