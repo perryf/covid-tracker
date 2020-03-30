@@ -51,7 +51,13 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const HeaderBar = props => {
-	const { sideOpen, handleDrawerOpen, statesInfo, changeState } = props
+	const {
+		sideOpen,
+		handleDrawerOpen,
+		selectState,
+		statesInfo,
+		changeState
+	} = props
 	const classes = useStyles()
 
 	const changeStateHelper = ({ target: { value } }) => {
@@ -93,6 +99,11 @@ const HeaderBar = props => {
 						native
 						onChange={changeStateHelper}
 						className={classes.stateInput}
+						value={selectState}
+						inputProps={{
+							name: 'stateDisplay',
+							id: 'stateOptions'
+						}}
 					>
 						<option value={'us'}>USA</option>
 						{statesInfo.map(info => {
@@ -110,8 +121,16 @@ const HeaderBar = props => {
 }
 
 HeaderBar.propTypes = {
+	selectState: PropTypes.string,
+	statesInfo: PropTypes.array,
 	sideOpen: PropTypes.bool.isRequired,
-	handleDrawerOpen: PropTypes.func.isRequired
+	handleDrawerOpen: PropTypes.func.isRequired,
+	changeState: PropTypes.func.isRequired
+}
+
+HeaderBar.defaultProps = {
+	selectState: '',
+	statesInfo: []
 }
 
 export default HeaderBar

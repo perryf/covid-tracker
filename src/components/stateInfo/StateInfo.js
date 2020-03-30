@@ -72,15 +72,24 @@ const StateInfo = props => {
 			)}
 
 			<Typography component="p" variant="body1" color="textPrimary">
-				Total Positive Cases: {selectStateCurrent.positive}
+				Total Positive Cases:{' '}
+				{selectStateCurrent.positive
+					? selectStateCurrent.positive.toLocaleString()
+					: 0}
 			</Typography>
 
 			<Typography component="p" variant="body1" color="textPrimary">
-				Total Deaths: {selectStateCurrent.death}
+				Total Deaths:{' '}
+				{selectStateCurrent.death
+					? selectStateCurrent.death.toLocaleString()
+					: 0}
 			</Typography>
 
 			<Typography component="p" variant="body1" color="textPrimary">
-				Total Hospitalized: {selectStateCurrent.hospitalized}
+				Total Hospitalized:{' '}
+				{selectStateCurrent.hospitalized
+					? selectStateCurrent.hospitalized.toLocaleString()
+					: 0}
 			</Typography>
 
 			<div className={classes.linkStyle}>{primaryLink}</div>

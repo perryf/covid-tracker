@@ -51,11 +51,14 @@ const Dashboard = props => {
 		usHistoric
 	} = props
 
+	// * STATE
+	const [selectState, setSelectedState] = useState('us')
 	const [chartDisplay, setChartDisplay] = useState('positive')
 	const [chartDateRange, setChartDateRange] = useState('total')
-	const [selectState, setSelectedState] = useState('us')
+	const [tableDisplay, setTableDisplay] = useState('history')
 	const [sideOpen, setOpen] = React.useState(false)
 
+	// * METHODS
 	const changeState = stateAbr => {
 		setSelectedState(stateAbr)
 	}
@@ -64,6 +67,9 @@ const Dashboard = props => {
 	}
 	const changeChartDateRange = ({ target: { value } }) => {
 		setChartDateRange(value)
+	}
+	const changeTableDisplay = ({ target: { value } }) => {
+		setTableDisplay(value)
 	}
 	const handleDrawerClose = () => {
 		setOpen(false)
@@ -146,7 +152,12 @@ const Dashboard = props => {
 						{/* Recent Table */}
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={clsx(classes.paper, classes.tablePaper)}>
-								<TableDisplay selectStateHistory={selectStateHistory} />
+								<TableDisplay
+									selectStateHistory={selectStateHistory}
+									statesCurrent={statesCurrent}
+									tableDisplay={tableDisplay}
+									changeTableDisplay={changeTableDisplay}
+								/>
 							</Paper>
 						</Grid>
 					</Grid>
