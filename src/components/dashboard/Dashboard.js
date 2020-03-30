@@ -4,15 +4,16 @@ import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Chart from '../chart/Chart'
 import Container from '@material-ui/core/Container'
 import Footer from '../footer/Footer'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
-import SideDrawer from '../sideDrawer/SideDrawer'
+import Chart from '../chart/Chart'
 import HeaderBar from '../headerBar/HeaderBar'
-import TableDisplay from '../tableDisplay/TableDisplay'
+import PieChartDisplay from '../pieChartDisplay/PieChartDisplay'
+import SideDrawer from '../sideDrawer/SideDrawer'
 import StateInfo from '../stateInfo/StateInfo'
+import TableDisplay from '../tableDisplay/TableDisplay'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -104,12 +105,19 @@ const Dashboard = props => {
 				<Container maxWidth="lg" className={classes.container}>
 					<Grid container spacing={2}>
 						{/* StateInfo */}
-						<Grid item xs={12} md={12} lg={12}>
+						<Grid item xs={6} md={6} lg={6}>
 							<StateInfo
 								selectState={selectState}
 								selectStateInfo={selectStateInfo}
 								selectStateCurrent={selectStateCurrent}
 							/>
+						</Grid>
+
+						{/* Pie Chart (Only on US View) */}
+						<Grid item xs={6} md={6} lg={6}>
+							<Paper className={clsx(classes.paper, classes.chartPaper)}>
+								<PieChartDisplay statesCurrent={statesCurrent} />
+							</Paper>
 						</Grid>
 
 						{/* Chart */}

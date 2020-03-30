@@ -5,8 +5,8 @@ import { useTheme } from '@material-ui/core/styles'
 import {
 	AreaChart,
 	Area,
-	LineChart,
-	Line,
+	BarChart,
+	Bar,
 	XAxis,
 	YAxis,
 	Label,
@@ -31,16 +31,16 @@ const getYLabel = type => {
 			return 'Total Hospitalized'
 
 		case 'positiveIncrease':
-			return 'New Positive Cases'
+			return 'Daily Positive Cases'
 
 		case 'deathIncrease':
-			return 'New Deaths'
+			return 'Daily Deaths'
 
 		case 'totalTestResultsIncrease':
-			return 'New Test Results'
+			return 'Daily Test Results'
 
 		case 'hospitalizedIncrease':
-			return 'New Hospitalized Patients'
+			return 'Daily Hospitalized'
 
 		default:
 			return ''
@@ -144,7 +144,7 @@ const Chart = props => {
 						/>
 					</AreaChart>
 				) : (
-					<LineChart
+					<BarChart
 						data={data}
 						margin={{ top: 8, right: 8, bottom: 0, left: 12 }}
 					>
@@ -152,13 +152,8 @@ const Chart = props => {
 						{yAxis}
 						{cartesianGrid}
 						{toolTip}
-						<Line
-							type="linear"
-							dataKey="amount"
-							stroke={theme.palette.primary.main}
-							dot={false}
-						/>
-					</LineChart>
+						<Bar dataKey="amount" fill={theme.palette.primary.main} />
+					</BarChart>
 				)}
 			</ResponsiveContainer>
 		</Fragment>
@@ -180,3 +175,19 @@ Chart.defaultProps = {
 }
 
 export default Chart
+
+// <LineChart
+// data={data}
+// margin={{ top: 8, right: 8, bottom: 0, left: 12 }}
+// >
+// {xAxis}
+// {yAxis}
+// {cartesianGrid}
+// {toolTip}
+// <Line
+// 	type="linear"
+// 	dataKey="amount"
+// 	stroke={theme.palette.primary.main}
+// 	dot={false}
+// />
+// </LineChart>

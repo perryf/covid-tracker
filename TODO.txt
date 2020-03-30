@@ -3,3 +3,5 @@
 - favicon
 - tab header
 - Improve chart
+
+- Add main totals to state info

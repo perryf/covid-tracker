@@ -52,6 +52,7 @@ const useStyles = makeStyles({
 
 const StateInfo = props => {
 	const { selectStateInfo, selectStateCurrent, selectState } = props
+
 	const classes = useStyles()
 
 	const title = formatTitle(selectState, selectStateInfo)
@@ -69,6 +70,18 @@ const StateInfo = props => {
 					Data quality grade: {selectStateCurrent.grade}
 				</Typography>
 			)}
+
+			<Typography component="p" variant="body1" color="textPrimary">
+				Total Positive Cases: {selectStateCurrent.positive}
+			</Typography>
+
+			<Typography component="p" variant="body1" color="textPrimary">
+				Total Deaths: {selectStateCurrent.death}
+			</Typography>
+
+			<Typography component="p" variant="body1" color="textPrimary">
+				Total Hospitalized: {selectStateCurrent.hospitalized}
+			</Typography>
 
 			<div className={classes.linkStyle}>{primaryLink}</div>
 			<div className={classes.linkStyle}>{secondaryLink}</div>
