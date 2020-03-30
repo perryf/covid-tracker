@@ -39,7 +39,7 @@ const ChartFilters = props => {
 						id: 'chartDisplayOptions'
 					}}
 				>
-					<option value="positive">Total Positive Cases</option>
+					<option value="positive">Total Positive</option>
 					<option value="death">Total Deaths</option>
 					<option value="totalTestResults">Total Tested</option>
 					<option value="hospitalized">Total Hospitalized</option>
@@ -61,8 +61,8 @@ const ChartFilters = props => {
 						id: 'chartDateOptions'
 					}}
 				>
-					<option value="week">Past Week</option>
-					<option value="month">Past Month</option>
+					<option value="week">Week</option>
+					<option value="month">Month</option>
 					<option value="total">All Time</option>
 				</Select>
 			</FormControl>

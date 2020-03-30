@@ -55,8 +55,6 @@ const PieChartDisplay = props => {
 							const rand3 = getRand()
 							const fillColor = `rgb(${rand1}, ${rand2}, ${rand3})`
 
-							// TODO -> Assign colors to state when they load
-
 							return <Cell key={`cell-${index}`} fill={fillColor} />
 						})}
 					</Pie>

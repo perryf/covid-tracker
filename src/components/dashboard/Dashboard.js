@@ -89,23 +89,31 @@ const Dashboard = props => {
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
-			<HeaderBar sideOpen={sideOpen} handleDrawerOpen={handleDrawerOpen} />
-
-			{/* Sidebar */}
-			<SideDrawer
+			<HeaderBar
 				sideOpen={sideOpen}
+				handleDrawerOpen={handleDrawerOpen}
 				statesInfo={statesInfo}
 				selectState={selectState}
 				changeState={changeState}
-				handleDrawerClose={handleDrawerClose}
 			/>
+
+			{/* Sidebar */}
+			{false && ( // * Moved to input in header - delete if no longer needed
+				<SideDrawer
+					sideOpen={sideOpen}
+					statesInfo={statesInfo}
+					selectState={selectState}
+					changeState={changeState}
+					handleDrawerClose={handleDrawerClose}
+				/>
+			)}
 
 			<main className={classes.content}>
 				<div className={classes.appBarSpacer} />
 				<Container maxWidth="lg" className={classes.container}>
 					<Grid container spacing={2}>
 						{/* StateInfo */}
-						<Grid item xs={6} md={6} lg={6}>
+						<Grid item xs={12} md={12} lg={12}>
 							<StateInfo
 								selectState={selectState}
 								selectStateInfo={selectStateInfo}
@@ -114,11 +122,13 @@ const Dashboard = props => {
 						</Grid>
 
 						{/* Pie Chart (Only on US View) */}
-						<Grid item xs={6} md={6} lg={6}>
-							<Paper className={clsx(classes.paper, classes.chartPaper)}>
-								<PieChartDisplay statesCurrent={statesCurrent} />
-							</Paper>
-						</Grid>
+						{false && ( // * Maybe add in later
+							<Grid item xs={6} md={6} lg={6}>
+								<Paper className={clsx(classes.paper, classes.chartPaper)}>
+									<PieChartDisplay statesCurrent={statesCurrent} />
+								</Paper>
+							</Grid>
+						)}
 
 						{/* Chart */}
 						<Grid item xs={12} md={12} lg={12}>
