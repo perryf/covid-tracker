@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	stateInput: {
 		margin: '0 18px',
-		padding: '2px 8px',
+		padding: '2px 12px',
 		background: 'white'
 	},
 	toolbar: {

@@ -1,16 +1,8 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import { useTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import {
-	ResponsiveContainer,
-	PieChart,
-	Pie,
-	Label,
-	Tooltip,
-	Cell
-} from 'recharts'
+import { ResponsiveContainer, PieChart, Pie, Tooltip, Cell } from 'recharts'
 
 const getRand = () => {
 	return Math.floor(Math.random() * 120) + 80

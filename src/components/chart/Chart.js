@@ -81,7 +81,7 @@ const Chart = props => {
 		.reverse()
 		.map(day => {
 			return createData(
-				day.dateChecked ? moment(day.dateChecked).format('MM/DD/YYYY') : '',
+				day.dateChecked ? moment(day.dateChecked).format('M/DD/YY') : '',
 				day[displayType] || 0
 			)
 		})
@@ -89,7 +89,10 @@ const Chart = props => {
 	// * Chart Customized Inserts
 	const xAxis = <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
 	const yAxis = (
-		<YAxis stroke={theme.palette.text.secondary}>
+		<YAxis
+			stroke={theme.palette.text.secondary}
+			tickFormatter={tick => (!isNaN(tick) ? tick.toLocaleString() : '')}
+		>
 			<Label
 				angle={270}
 				position="left"
@@ -100,7 +103,13 @@ const Chart = props => {
 		</YAxis>
 	)
 	const cartesianGrid = <CartesianGrid strokeDasharray="3 3" />
-	const toolTip = <Tooltip />
+	const toolTip = (
+		<Tooltip
+			formatter={value => {
+				return !isNaN(value) ? value.toLocaleString() : ''
+			}}
+		/>
+	)
 
 	// * Chart Gradients (for Area Chart)
 	const chartGradients = (

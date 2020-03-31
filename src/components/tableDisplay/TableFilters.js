@@ -15,7 +15,6 @@ const useStyles = makeStyles({
 
 const TableFilters = props => {
 	const { tableDisplay, changeTableDisplay } = props
-
 	const classes = useStyles()
 
 	return (

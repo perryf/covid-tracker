@@ -54,7 +54,6 @@ const StateInfo = props => {
 	const { selectStateInfo, selectStateCurrent, selectState } = props
 
 	const classes = useStyles()
-
 	const title = formatTitle(selectState, selectStateInfo)
 	const primaryLink = formatLink(selectStateInfo.covid19Site)
 	const secondaryLink = formatLink(selectStateInfo.covid19SiteSecondary)
