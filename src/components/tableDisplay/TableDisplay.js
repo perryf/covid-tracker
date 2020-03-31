@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -10,23 +11,57 @@ import TableRow from '@material-ui/core/TableRow'
 import Typography from '@material-ui/core/Typography'
 import TableFilters from '../tableDisplay/TableFilters'
 
-const useStyles = makeStyles({
+const getCountryTotals = (usCurrent = []) => {
+	if (usCurrent[0] && usCurrent[0].positive) {
+		return {
+			positive: usCurrent[0].positive,
+			negative: usCurrent[0].negative,
+			hospitalized: usCurrent[0].hospitalized,
+			death: usCurrent[0].death,
+			totalTestResults: usCurrent[0].totalTestResults
+		}
+	}
+
+	return {
+		positive: 0,
+		negative: 0,
+		hospitalized: 0,
+		death: 0,
+		totalTestResults: 0
+	}
+}
+
+const useStyles = makeStyles(theme => ({
+	tableHeader: {
+		display: 'flex',
+		alignItems: 'center',
+		minWidth: 360
+	},
+	tableSubtext: {
+		marginLeft: 18
+	},
 	sortingColumnHeader: {
 		cursor: 'pointer',
-		color: '#00796b'
+		color: theme.palette.primary.main
+	},
+	sortSelected: {
+		color: theme.palette.secondary.dark
 	}
-})
+}))
 
 const TableDisplay = props => {
 	const {
 		selectStateHistory,
 		statesCurrent,
+		usCurrent,
 		tableDisplay,
 		changeTableDisplay
 	} = props
 
+	// * STATE
 	const [sortOrder, setSortOrder] = useState('positive')
 
+	// * METHODS
 	const changeSortOrder = name => {
 		setSortOrder(name)
 	}
@@ -43,6 +78,8 @@ const TableDisplay = props => {
 		}
 		return 0
 	})
+
+	const usTotals = getCountryTotals(usCurrent)
 
 	const table =
 		tableDisplay === 'history' ? (
@@ -94,8 +131,7 @@ const TableDisplay = props => {
 							</TableCell>
 							<TableCell>
 								{row.positive && row.totalTestResults
-									? `${Math.round(
-											(row.positive / row.totalTestResults) * 100,
+									? `${((row.positive / row.totalTestResults) * 100).toFixed(
 											2
 									  )}%`
 									: ''}
@@ -122,7 +158,10 @@ const TableDisplay = props => {
 					<TableRow>
 						<TableCell>
 							<span
-								className={classes.sortingColumnHeader}
+								className={clsx(
+									classes.sortingColumnHeader,
+									sortOrder === 'state' && classes.sortSelected
+								)}
 								onClick={() => changeSortOrder('state')}
 							>
 								State
@@ -130,7 +169,10 @@ const TableDisplay = props => {
 						</TableCell>
 						<TableCell>
 							<span
-								className={classes.sortingColumnHeader}
+								className={clsx(
+									classes.sortingColumnHeader,
+									sortOrder === 'positive' && classes.sortSelected
+								)}
 								onClick={() => changeSortOrder('positive')}
 							>
 								Tested Positive
@@ -138,15 +180,21 @@ const TableDisplay = props => {
 						</TableCell>
 						<TableCell>
 							<span
-								className={classes.sortingColumnHeader}
+								className={clsx(
+									classes.sortingColumnHeader,
+									sortOrder === 'negative' && classes.sortSelected
+								)}
 								onClick={() => changeSortOrder('negative')}
 							>
-								Negative Tests
+								Tested Negative
 							</span>
 						</TableCell>
 						<TableCell>
 							<span
-								className={classes.sortingColumnHeader}
+								className={clsx(
+									classes.sortingColumnHeader,
+									sortOrder === 'totalTestResults' && classes.sortSelected
+								)}
 								onClick={() => changeSortOrder('totalTestResults')}
 							>
 								Total Tested
@@ -155,7 +203,10 @@ const TableDisplay = props => {
 						<TableCell>Percent Positive</TableCell>
 						<TableCell>
 							<span
-								className={classes.sortingColumnHeader}
+								className={clsx(
+									classes.sortingColumnHeader,
+									sortOrder === 'death' && classes.sortSelected
+								)}
 								onClick={() => changeSortOrder('death')}
 							>
 								Deaths
@@ -163,7 +214,10 @@ const TableDisplay = props => {
 						</TableCell>
 						<TableCell>
 							<span
-								className={classes.sortingColumnHeader}
+								className={clsx(
+									classes.sortingColumnHeader,
+									sortOrder === 'hospitalized' && classes.sortSelected
+								)}
 								onClick={() => changeSortOrder('hospitalized')}
 							>
 								Hospitalized
@@ -177,44 +231,54 @@ const TableDisplay = props => {
 						<TableRow key={row.hash}>
 							<TableCell>{row.state}</TableCell>
 							<TableCell>
-								{row.positive ? row.positive.toLocaleString() : ''} (+
-								{row.positiveIncrease
-									? row.positiveIncrease.toLocaleString()
+								{row.positive ? row.positive.toLocaleString() : ''} (
+								{row.positive && usTotals.positive
+									? ((row.positive / usTotals.positive) * 100).toFixed(2)
 									: 0}
-								)
+								%)
 							</TableCell>
 							<TableCell>
-								{row.negative ? row.negative.toLocaleString() : ''} (+
-								{row.negativeIncrease
-									? row.negativeIncrease.toLocaleString()
+								{row.negative ? row.negative.toLocaleString() : ''} (
+								{row.negative && usTotals.negative
+									? ((row.negative / usTotals.negative) * 100).toFixed(2)
 									: 0}
-								)
+								%)
 							</TableCell>
 							<TableCell>
 								{row.totalTestResults
 									? row.totalTestResults.toLocaleString()
 									: ''}{' '}
-								(+
-								{row.totalTestResultsIncrease || 0})
+								(
+								{row.totalTestResults && usTotals.totalTestResults
+									? (
+											(row.totalTestResults / usTotals.totalTestResults) *
+											100
+									  ).toFixed(2)
+									: 0}
+								%)
 							</TableCell>
 							<TableCell>
 								{row.positive && row.totalTestResults
-									? `${Math.round(
-											(row.positive / row.totalTestResults) * 100,
+									? `${((row.positive / row.totalTestResults) * 100).toFixed(
 											2
 									  )}%`
 									: ''}
 							</TableCell>
 							<TableCell>
-								{row.death ? row.death.toLocaleString() : 0} (+
-								{row.deathIncrease ? row.deathIncrease.toLocaleString() : 0})
+								{row.death ? row.death.toLocaleString() : 0} (
+								{row.death && usTotals.death
+									? ((row.death / usTotals.death) * 100).toFixed(2)
+									: 0}
+								%)
 							</TableCell>
 							<TableCell>
-								{row.hospitalized ? row.hospitalized.toLocaleString() : 0} (+
-								{row.hospitalizedIncrease
-									? row.hospitalizedIncrease.toLocaleString()
+								{row.hospitalized ? row.hospitalized.toLocaleString() : 0} (
+								{row.hospitalized && usTotals.hospitalized
+									? ((row.hospitalized / usTotals.hospitalized) * 100).toFixed(
+											2
+									  )
 									: 0}
-								)
+								%)
 							</TableCell>
 						</TableRow>
 					))}
@@ -224,17 +288,22 @@ const TableDisplay = props => {
 
 	return (
 		<Fragment>
-			{false && ( // * Remove if no longer needed
-				<Typography component="h2" variant="h6" color="primary" gutterBottom>
-					History
+			<div className={classes.tableHeader}>
+				<TableFilters
+					tableDisplay={tableDisplay}
+					changeTableDisplay={changeTableDisplay}
+				/>
+				<Typography
+					className={classes.tableSubtext}
+					component="p"
+					variant="caption"
+					color="textSecondary"
+				>
+					{tableDisplay === 'history'
+						? '(number of new daily increases)'
+						: '(percentage of country)'}
 				</Typography>
-			)}
-
-			<TableFilters
-				tableDisplay={tableDisplay}
-				changeTableDisplay={changeTableDisplay}
-			/>
-
+			</div>
 			{table}
 		</Fragment>
 	)
@@ -243,6 +312,7 @@ const TableDisplay = props => {
 TableDisplay.propTypes = {
 	selectStateHistory: PropTypes.array,
 	statesCurrent: PropTypes.array,
+	usCurrent: PropTypes.array,
 	tableDisplay: PropTypes.string,
 	changeTableDisplay: PropTypes.func.isRequired
 }

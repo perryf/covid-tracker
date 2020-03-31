@@ -156,6 +156,7 @@ const Dashboard = props => {
 									selectStateHistory={selectStateHistory}
 									statesCurrent={statesCurrent}
 									tableDisplay={tableDisplay}
+									usCurrent={usCurrent}
 									changeTableDisplay={changeTableDisplay}
 								/>
 							</Paper>

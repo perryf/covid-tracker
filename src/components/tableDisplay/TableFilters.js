@@ -8,7 +8,6 @@ const useStyles = makeStyles({
 	chartInput: {
 		margin: '0 6px',
 		padding: 2,
-		width: '40%',
 		maxWidth: 250
 	}
 })

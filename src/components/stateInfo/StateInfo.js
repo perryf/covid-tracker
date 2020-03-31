@@ -41,6 +41,9 @@ const formatTitle = (selectState, info) => {
 }
 
 const useStyles = makeStyles({
+	stateStats: {
+		fontSize: 14
+	},
 	linkStyle: {
 		color: '#e33371'
 	},
@@ -70,21 +73,56 @@ const StateInfo = props => {
 				</Typography>
 			)}
 
-			<Typography component="p" variant="body1" color="textPrimary">
+			<Typography
+				component="p"
+				variant="body1"
+				color="textPrimary"
+				className={classes.stateStats}
+			>
 				Total Positive Cases:{' '}
 				{selectStateCurrent.positive
 					? selectStateCurrent.positive.toLocaleString()
 					: 0}
 			</Typography>
-
-			<Typography component="p" variant="body1" color="textPrimary">
+			<Typography
+				component="p"
+				variant="body1"
+				color="textPrimary"
+				className={classes.stateStats}
+			>
+				Total Negative Cases:{' '}
+				{selectStateCurrent.negative
+					? selectStateCurrent.negative.toLocaleString()
+					: 0}
+			</Typography>
+			<Typography
+				component="p"
+				variant="body1"
+				color="textPrimary"
+				className={classes.stateStats}
+			>
+				Total People Tested:{' '}
+				{selectStateCurrent.totalTestResults
+					? selectStateCurrent.totalTestResults.toLocaleString()
+					: 0}
+			</Typography>
+			<Typography
+				component="p"
+				variant="body1"
+				color="textPrimary"
+				className={classes.stateStats}
+			>
 				Total Deaths:{' '}
 				{selectStateCurrent.death
 					? selectStateCurrent.death.toLocaleString()
 					: 0}
 			</Typography>
-
-			<Typography component="p" variant="body1" color="textPrimary">
+			<Typography
+				component="p"
+				variant="body1"
+				color="textPrimary"
+				className={classes.stateStats}
+			>
 				Total Hospitalized:{' '}
 				{selectStateCurrent.hospitalized
 					? selectStateCurrent.hospitalized.toLocaleString()
