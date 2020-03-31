@@ -22,6 +22,11 @@ Data from <https://covidtracking.com/api/>
 
 - **Perry Fustero**
 
+
+## Contribute
+
+- Make a pull request, post issues, email me, whatevs!
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details
