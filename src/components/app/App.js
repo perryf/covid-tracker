@@ -15,7 +15,17 @@ const App = () => {
 	useEffect(() => {
 		fetch(urlStates)
 			.then(res => res.json())
-			.then(json => setCurrentStates(json))
+			.then((json = []) => {
+				setCurrentStates(
+					json.map(state => ({
+						...state,
+						deathRate:
+							state.death && state.positive
+								? ((state.death / state.positive) * 100).toFixed(2)
+								: 0
+					}))
+				)
+			})
 			.catch(err => console.info(err))
 
 		fetch(urlDaily)
@@ -25,7 +35,7 @@ const App = () => {
 
 		fetch(urlInfo)
 			.then(res => res.json())
-			.then(json =>
+			.then(json => {
 				setInfoStates(
 					json.sort((a, b) => {
 						if (a.state < b.state) return -1
@@ -33,7 +43,7 @@ const App = () => {
 						return 0
 					})
 				)
-			)
+			})
 			.catch(err => console.info(err))
 
 		fetch(urlUSCurrent)
@@ -43,7 +53,17 @@ const App = () => {
 
 		fetch(urlUSHistoric)
 			.then(res => res.json())
-			.then(json => setUSHistoric(json))
+			.then((json = []) => {
+				setUSHistoric(
+					json.map(day => ({
+						...day,
+						deathRate:
+							day.death && day.positive
+								? ((day.death / day.positive) * 100).toFixed(2)
+								: 0
+					}))
+				)
+			})
 			.catch(err => console.info(err))
 	}, [])
 

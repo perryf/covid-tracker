@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 })
 
 const TableFilters = props => {
-	const { tableDisplay, changeTableDisplay } = props
+	const { tableDisplay, changeTableDisplay, selectState } = props
 	const classes = useStyles()
 
 	return (
@@ -28,7 +28,9 @@ const TableFilters = props => {
 					id: 'tableDisplayOptions'
 				}}
 			>
-				<option value="history">History</option>
+				<option value="history">
+					{selectState ? selectState.toUpperCase() : ''} History
+				</option>
 				<option value="allStates">All States</option>
 			</Select>
 		</FormControl>
@@ -37,11 +39,13 @@ const TableFilters = props => {
 
 TableFilters.propTypes = {
 	tableDisplay: PropTypes.string,
+	selectState: PropTypes.string,
 	changeTableDisplay: PropTypes.func.isRequired
 }
 
 TableFilters.defaultProps = {
-	tableDisplay: ''
+	tableDisplay: '',
+	selectState: ''
 }
 
 export default TableFilters

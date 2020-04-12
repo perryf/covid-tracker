@@ -53,6 +53,7 @@ const TableDisplay = props => {
 	const {
 		selectStateHistory,
 		statesCurrent,
+		selectState,
 		usCurrent,
 		tableDisplay,
 		changeTableDisplay
@@ -93,6 +94,7 @@ const TableDisplay = props => {
 						<TableCell>Total Tested</TableCell>
 						<TableCell>Percent Positive</TableCell>
 						<TableCell>Deaths</TableCell>
+						<TableCell>Death Rate</TableCell>
 						<TableCell>Hospitalized</TableCell>
 					</TableRow>
 				</TableHead>
@@ -140,6 +142,7 @@ const TableDisplay = props => {
 								{row.death ? row.death.toLocaleString() : 0} (+
 								{row.deathIncrease ? row.deathIncrease.toLocaleString() : 0})
 							</TableCell>
+							<TableCell>{row.deathRate ? `${row.deathRate}%` : ''}</TableCell>
 							<TableCell>
 								{row.hospitalized ? row.hospitalized.toLocaleString() : 0} (+
 								{row.hospitalizedIncrease
@@ -212,6 +215,19 @@ const TableDisplay = props => {
 								Deaths
 							</span>
 						</TableCell>
+
+						<TableCell>
+							<span
+								className={clsx(
+									classes.sortingColumnHeader,
+									sortOrder === 'deathRate' && classes.sortSelected
+								)}
+								onClick={() => changeSortOrder('deathRate')}
+							>
+								Death Rate
+							</span>
+						</TableCell>
+
 						<TableCell>
 							<span
 								className={clsx(
@@ -271,6 +287,7 @@ const TableDisplay = props => {
 									: 0}
 								%)
 							</TableCell>
+							<TableCell>{row.deathRate ? `${row.deathRate}%` : ''}</TableCell>
 							<TableCell>
 								{row.hospitalized ? row.hospitalized.toLocaleString() : 0} (
 								{row.hospitalized && usTotals.hospitalized
@@ -292,6 +309,7 @@ const TableDisplay = props => {
 				<TableFilters
 					tableDisplay={tableDisplay}
 					changeTableDisplay={changeTableDisplay}
+					selectState={selectState}
 				/>
 				<Typography
 					className={classes.tableSubtext}
@@ -310,6 +328,7 @@ const TableDisplay = props => {
 }
 
 TableDisplay.propTypes = {
+	selectState: PropTypes.string,
 	selectStateHistory: PropTypes.array,
 	statesCurrent: PropTypes.array,
 	usCurrent: PropTypes.array,
@@ -318,6 +337,7 @@ TableDisplay.propTypes = {
 }
 
 TableDisplay.defaultProps = {
+	selectState: '',
 	selectStateHistory: [],
 	statesCurrent: [],
 	tableDisplay: 'history'

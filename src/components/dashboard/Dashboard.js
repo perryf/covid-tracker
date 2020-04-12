@@ -153,6 +153,7 @@ const Dashboard = props => {
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={clsx(classes.paper, classes.tablePaper)}>
 								<TableDisplay
+									selectState={selectState}
 									selectStateHistory={selectStateHistory}
 									statesCurrent={statesCurrent}
 									tableDisplay={tableDisplay}
