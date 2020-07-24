@@ -20,9 +20,10 @@ export const getCountryTotals = (usCurrent = []) => {
 
 export const handleSort = sortOrder => (a, b) => {
 	if (sortOrder === 'percentPositive') {
-		// ? This is the wrong kind of "Percentage of positive - however, with current data, do not have total in state"
+		// ? This is the wrong kind of "Percentage of positive" - would need to bring in state population data to do this properly
 		const aPercent = a.positive / a.totalTestResults
 		const bPercent = b.positive / b.totalTestResults
+
 		if (aPercent < bPercent) return 1
 		if (bPercent < aPercent) return -1
 	} else if (sortOrder === 'state') {

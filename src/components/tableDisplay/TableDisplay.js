@@ -56,8 +56,8 @@ const TableDisplay = props => {
 			<div className={classes.tableHeader}>
 				<TableFilters
 					tableDisplay={tableDisplay}
-					changeTableDisplay={changeTableDisplay}
 					selectState={selectState}
+					changeTableDisplay={changeTableDisplay}
 				/>
 				<Typography
 					className={classes.tableSubtext}
@@ -297,10 +297,10 @@ const TableDisplay = props => {
 
 TableDisplay.propTypes = {
 	selectState: PropTypes.string,
+	tableDisplay: PropTypes.string,
 	selectStateHistory: PropTypes.array,
 	statesCurrent: PropTypes.array,
 	usCurrent: PropTypes.array,
-	tableDisplay: PropTypes.string,
 	changeTableDisplay: PropTypes.func.isRequired
 }
 
@@ -308,6 +308,7 @@ TableDisplay.defaultProps = {
 	selectState: '',
 	selectStateHistory: [],
 	statesCurrent: [],
+	usCurrent: [],
 	tableDisplay: 'history'
 }
 

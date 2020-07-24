@@ -4,13 +4,9 @@ import { useTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { ResponsiveContainer, PieChart, Pie, Tooltip, Cell } from 'recharts'
 
-const getRand = () => {
-	return Math.floor(Math.random() * 120) + 80
-}
-
-const createData = (name, value) => {
-	return { name, value }
-}
+// * Helpers
+const getRand = () => Math.floor(Math.random() * 120) + 80
+const createData = (name, value) => ({ name, value })
 
 const PieChartDisplay = props => {
 	const { statesCurrent } = props

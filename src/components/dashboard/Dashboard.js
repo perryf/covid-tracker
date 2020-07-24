@@ -5,14 +5,14 @@ import { makeStyles } from '@material-ui/core/styles'
 import Box from '@material-ui/core/Box'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
-import Footer from '../footer/Footer'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
-import Chart from '../chart/Chart'
 import HeaderBar from '../headerBar/HeaderBar'
-import PieChartDisplay from '../pieChartDisplay/PieChartDisplay'
 import StateInfo from '../stateInfo/StateInfo'
+import Chart from '../chart/Chart'
+import PieChartDisplay from '../pieChartDisplay/PieChartDisplay'
 import TableDisplay from '../tableDisplay/TableDisplay'
+import Footer from '../footer/Footer'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -56,7 +56,6 @@ const Dashboard = props => {
 	const [chartDisplay, setChartDisplay] = useState('positive')
 	const [chartDateRange, setChartDateRange] = useState('total')
 	const [tableDisplay, setTableDisplay] = useState('history')
-	const [sideOpen, setOpen] = React.useState(false)
 
 	// * METHODS
 	const changeState = stateAbr => {
@@ -70,12 +69,6 @@ const Dashboard = props => {
 	}
 	const changeTableDisplay = ({ target: { value } }) => {
 		setTableDisplay(value)
-	}
-	const handleDrawerClose = () => {
-		setOpen(false)
-	}
-	const handleDrawerOpen = () => {
-		setOpen(true)
 	}
 
 	// * STYLES
@@ -96,8 +89,6 @@ const Dashboard = props => {
 		<div className={classes.root}>
 			<CssBaseline />
 			<HeaderBar
-				sideOpen={sideOpen}
-				handleDrawerOpen={handleDrawerOpen}
 				statesInfo={statesInfo}
 				selectState={selectState}
 				changeState={changeState}
@@ -143,9 +134,9 @@ const Dashboard = props => {
 							<Paper className={clsx(classes.paper, classes.tablePaper)}>
 								<TableDisplay
 									selectState={selectState}
+									tableDisplay={tableDisplay}
 									selectStateHistory={selectStateHistory}
 									statesCurrent={statesCurrent}
-									tableDisplay={tableDisplay}
 									usCurrent={usCurrent}
 									changeTableDisplay={changeTableDisplay}
 								/>

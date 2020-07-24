@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { urlStates, urlDaily, urlInfo, urlUSCurrent, urlUSHistoric } from 'data'
 import Dashboard from '../dashboard/Dashboard'
-import './App.css'
 
 const App = () => {
 	// * State Init
@@ -26,12 +25,12 @@ const App = () => {
 					}))
 				)
 			})
-			.catch(err => console.info(err))
+			.catch(err => console.error(err))
 
 		fetch(urlDaily)
 			.then(res => res.json())
 			.then(json => setHistoricStates(json))
-			.catch(err => console.info(err))
+			.catch(err => console.error(err))
 
 		fetch(urlInfo)
 			.then(res => res.json())
@@ -44,12 +43,12 @@ const App = () => {
 					})
 				)
 			})
-			.catch(err => console.info(err))
+			.catch(err => console.error(err))
 
 		fetch(urlUSCurrent)
 			.then(res => res.json())
 			.then(json => setUSCurrent(json))
-			.catch(err => console.info(err))
+			.catch(err => console.error(err))
 
 		fetch(urlUSHistoric)
 			.then(res => res.json())
@@ -64,7 +63,7 @@ const App = () => {
 					}))
 				)
 			})
-			.catch(err => console.info(err))
+			.catch(err => console.error(err))
 	}, [])
 
 	return (
