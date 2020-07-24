@@ -11,17 +11,15 @@ Data from <https://covidtracking.com/api/>
 
 ## Built With
 
-- reactjs
+- react
 - material-ui (dashboard template)
 - recharts
 - moment
 - clsx
-- git
 
 ## Authors
 
 - **Perry Fustero**
-
 
 ## Contribute
 

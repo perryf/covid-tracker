@@ -11,7 +11,6 @@ import Paper from '@material-ui/core/Paper'
 import Chart from '../chart/Chart'
 import HeaderBar from '../headerBar/HeaderBar'
 import PieChartDisplay from '../pieChartDisplay/PieChartDisplay'
-import SideDrawer from '../sideDrawer/SideDrawer'
 import StateInfo from '../stateInfo/StateInfo'
 import TableDisplay from '../tableDisplay/TableDisplay'
 
@@ -38,7 +37,8 @@ const useStyles = makeStyles(theme => ({
 		height: 360
 	},
 	tablePaper: {
-		overflow: 'auto'
+		overflowX: 'auto',
+		overflowY: 'hidden'
 	}
 }))
 
@@ -102,17 +102,6 @@ const Dashboard = props => {
 				selectState={selectState}
 				changeState={changeState}
 			/>
-
-			{/* Sidebar */}
-			{false && ( // * Moved to input in header - delete if no longer needed
-				<SideDrawer
-					sideOpen={sideOpen}
-					statesInfo={statesInfo}
-					selectState={selectState}
-					changeState={changeState}
-					handleDrawerClose={handleDrawerClose}
-				/>
-			)}
 
 			<main className={classes.content}>
 				<div className={classes.appBarSpacer} />

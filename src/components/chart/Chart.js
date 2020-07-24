@@ -62,9 +62,7 @@ const filterDateRange = (dayObj, dateType) => {
 	}
 }
 
-const createData = (time, amount) => {
-	return { time, amount }
-}
+const createData = (time, amount) => ({ time, amount })
 
 const Chart = props => {
 	const { selectStateHistory, chartDisplay, chartDateRange } = props
@@ -96,6 +94,7 @@ const Chart = props => {
 			<Label
 				angle={270}
 				position="left"
+				offset={20}
 				style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
 			>
 				{getYLabel(displayType)}
@@ -104,11 +103,7 @@ const Chart = props => {
 	)
 	const cartesianGrid = <CartesianGrid strokeDasharray="3 3" />
 	const toolTip = (
-		<Tooltip
-			formatter={value => {
-				return !isNaN(value) ? value.toLocaleString() : ''
-			}}
-		/>
+		<Tooltip formatter={val => (!isNaN(val) ? val.toLocaleString() : '')} />
 	)
 
 	// * Chart Gradients (for Area Chart)
@@ -137,7 +132,7 @@ const Chart = props => {
 				{isAreaChart ? (
 					<AreaChart
 						data={data}
-						margin={{ top: 8, right: 8, bottom: 0, left: 12 }}
+						margin={{ top: 8, right: 8, bottom: 0, left: 30 }}
 					>
 						{chartGradients}
 						{xAxis}
@@ -155,7 +150,7 @@ const Chart = props => {
 				) : (
 					<BarChart
 						data={data}
-						margin={{ top: 8, right: 8, bottom: 0, left: 12 }}
+						margin={{ top: 8, right: 8, bottom: 0, left: 30 }}
 					>
 						{xAxis}
 						{yAxis}
@@ -184,19 +179,3 @@ Chart.defaultProps = {
 }
 
 export default Chart
-
-// <LineChart
-// data={data}
-// margin={{ top: 8, right: 8, bottom: 0, left: 12 }}
-// >
-// {xAxis}
-// {yAxis}
-// {cartesianGrid}
-// {toolTip}
-// <Line
-// 	type="linear"
-// 	dataKey="amount"
-// 	stroke={theme.palette.primary.main}
-// 	dot={false}
-// />
-// </LineChart>
