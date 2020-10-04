@@ -27,6 +27,14 @@ const filterDateRange = (dayObj, dateType) => {
 			const lastMonth = moment().subtract(1, 'months')
 			return moment(dayObj.dateChecked).isAfter(lastMonth)
 
+		case '3month':
+			const last3Months = moment().subtract(3, 'months')
+			return moment(dayObj.dateChecked).isAfter(last3Months)
+
+		case '6month':
+			const last6Months = moment().subtract(6, 'months')
+			return moment(dayObj.dateChecked).isAfter(last6Months)
+
 		default:
 			return true
 	}

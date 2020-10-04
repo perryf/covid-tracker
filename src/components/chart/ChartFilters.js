@@ -63,6 +63,8 @@ const ChartFilters = props => {
 				>
 					<option value="week">Week</option>
 					<option value="month">Month</option>
+					<option value="3month">3 Months</option>
+					<option value="6month">6 Months</option>
 					<option value="total">All Time</option>
 				</Select>
 			</FormControl>
